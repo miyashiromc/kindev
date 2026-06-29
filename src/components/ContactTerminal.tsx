@@ -19,7 +19,7 @@ export default function ContactTerminal() {
             <h2 className="text-3xl md:text-5xl font-display font-extrabold text-slate-900 mb-4 tracking-tight">
               ¿Listo para dar el siguiente paso?
             </h2>
-            <p className="text-slate-700 font-normal text-lg md:text-[18px] leading-[1.6] max-w-xl mx-auto">
+            <p className="text-slate-700 font-normal text-lg md:text-[18px] leading-[1.6] max-w-xl mx-auto text-justify">
               Contáctanos directamente por WhatsApp y cuéntanos sobre tu proyecto. Estamos listos para construirlo.
             </p>
           </div>

@@ -22,7 +22,7 @@ export default function ServicesBento() {
       <div className="container mx-auto max-w-7xl">
         <div className="mb-10 md:text-center">
           <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 text-slate-900">Soluciones para tu Empresa</h2>
-          <p className="text-slate-700 font-normal text-lg md:text-[18px] max-w-2xl mx-auto">
+          <p className="text-slate-700 font-normal text-lg md:text-[18px] max-w-2xl mx-auto text-justify">
             Desarrollamos tecnología que se adapta a tus necesidades y a las de tus clientes.
           </p>
         </div>
@@ -43,7 +43,7 @@ export default function ServicesBento() {
               <Globe className="text-kindev-emerald" size={28} />
             </div>
             <h3 className="text-[20px] font-display font-semibold mb-3 text-slate-900">Páginas Web de Alto Impacto</h3>
-            <p className="text-slate-600 font-normal max-w-md text-[16px] leading-[1.6]">
+            <p className="text-slate-600 font-normal max-w-md text-[16px] leading-[1.6] text-justify">
               Sitios web rápidos, atractivos y diseñados para retener la atención de tus visitantes y convertirlos en clientes.
             </p>
           </motion.div>
@@ -54,7 +54,7 @@ export default function ServicesBento() {
               <Smartphone className="text-kindev-cyan" size={28} />
             </div>
             <h3 className="text-[20px] font-display font-semibold mb-3 text-slate-900">Aplicaciones Móviles</h3>
-            <p className="text-slate-600 font-normal text-[16px] leading-[1.6]">
+            <p className="text-slate-600 font-normal text-[16px] leading-[1.6] text-justify">
               Llevamos tu marca al bolsillo de tus clientes. Apps fluidas, fáciles de usar y listas para destacar.
             </p>
           </motion.div>
@@ -65,7 +65,7 @@ export default function ServicesBento() {
               <ShoppingCart className="text-kindev-purple" size={28} />
             </div>
             <h3 className="text-[20px] font-display font-semibold mb-3 text-slate-900">E-Commerce Escalable</h3>
-            <p className="text-slate-600 font-normal text-[16px] leading-[1.6]">
+            <p className="text-slate-600 font-normal text-[16px] leading-[1.6] text-justify">
               Tiendas en línea robustas que no te dejan colgado en días de altas ventas. Procesos de pago optimizados para no perder clientes.
             </p>
           </motion.div>
@@ -77,7 +77,7 @@ export default function ServicesBento() {
               <Cpu className="text-white" size={28} />
             </div>
             <h3 className="text-[20px] font-display font-semibold mb-3">Plataformas y Sistemas a Medida</h3>
-            <p className="text-slate-300 font-normal max-w-xl text-[16px] leading-[1.6]">
+            <p className="text-slate-300 font-normal max-w-xl text-[16px] leading-[1.6] text-justify">
               ¿Procesos internos complejos? Los automatizamos. Creamos sistemas administrativos hechos exactamente a la medida de las reglas de tu negocio.
             </p>
           </motion.div>

@@ -40,7 +40,7 @@ export default function Workflow() {
       <div className="container mx-auto max-w-7xl">
         <div className="mb-20 md:text-center">
           <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 text-slate-900">¿Cómo trabajamos?</h2>
-          <p className="text-slate-700 font-normal text-lg md:text-[18px] max-w-2xl md:mx-auto">
+          <p className="text-slate-700 font-normal text-lg md:text-[18px] max-w-2xl md:mx-auto text-justify">
             Un proceso ágil de tres pasos. Ejecución rápida, comunicación transparente y resultados reales.
           </p>
         </div>
@@ -83,7 +83,7 @@ export default function Workflow() {
 
                   {/* Content */}
                   <h4 className="text-[22px] font-display font-bold mb-4 text-slate-900 group-hover:text-slate-800 transition-colors duration-300">{step.title}</h4>
-                  <p className="text-slate-600 font-normal text-[16px] leading-[1.6]">
+                  <p className="text-slate-600 font-normal text-[16px] leading-[1.6] text-justify">
                     {step.desc}
                   </p>
 

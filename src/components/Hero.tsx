@@ -102,7 +102,7 @@ export default function Hero() {
       {/* Soft Overlay to match Kindev style and ensure text readability */}
       <div className="fixed inset-0 bg-white/85 backdrop-blur-[4px] -z-10" />
 
-      <div className="container mx-auto px-6 relative z-10 max-w-5xl flex flex-col items-start md:items-center text-left md:text-center">
+      <div className="container mx-auto px-6 relative z-10 max-w-5xl flex flex-col items-start md:items-center text-justify">
         
         {/* Morphing Headline */}
         <motion.h1 

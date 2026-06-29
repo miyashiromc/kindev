@@ -28,7 +28,7 @@ export default function Portfolio() {
       <div className="container mx-auto max-w-7xl">
         <div className="mb-10 md:text-center">
           <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 text-slate-900">Casos de Éxito</h2>
-          <p className="text-slate-700 font-normal text-lg md:text-[18px] max-w-2xl mx-auto">
+          <p className="text-slate-700 font-normal text-lg md:text-[18px] max-w-2xl mx-auto text-justify">
             Proyectos reales funcionando en producción. Desde plataformas web completas hasta aplicaciones publicadas en la Play Store.
           </p>
         </div>
@@ -65,7 +65,7 @@ export default function Portfolio() {
               </div>
               
               <h3 className="text-[22px] font-display font-bold mb-3 text-slate-900">{project.name}</h3>
-              <p className="text-slate-700 font-normal text-[16px] leading-[1.6] mb-6">
+              <p className="text-slate-700 font-normal text-[16px] leading-[1.6] mb-6 text-justify">
                 {project.description}
               </p>
               
