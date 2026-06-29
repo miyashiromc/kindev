@@ -87,7 +87,7 @@ export default function Hero() {
   const { displayed, done } = useTypewriter("Nos alegra que estés aquí. El buen gusto siempre nos encuentra. Entonces, ¿qué vamos a construir hoy?");
 
   return (
-    <section className="relative min-h-[70vh] md:min-h-[85vh] flex flex-col items-center justify-center pt-28 pb-16 md:py-20 px-4 md:px-8 overflow-hidden">
+    <section className="relative md:min-h-[85vh] flex flex-col items-center justify-center pt-24 pb-8 md:py-20 px-4 md:px-8 overflow-hidden">
       {/* Video Background with Scrubbing Effect */}
       <div className="fixed inset-0 -z-20">
         <video
