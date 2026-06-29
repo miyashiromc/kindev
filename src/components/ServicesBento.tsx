@@ -18,9 +18,9 @@ export default function ServicesBento() {
   };
 
   return (
-    <section id="servicios" className="py-16 md:py-24 px-4 md:px-8 lg:px-12 bg-white">
+    <section id="servicios" className="py-10 md:py-16 px-4 md:px-8 lg:px-12 bg-white">
       <div className="container mx-auto max-w-7xl">
-        <div className="mb-16 md:text-center">
+        <div className="mb-10 md:text-center">
           <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 text-slate-900">Soluciones para tu Empresa</h2>
           <p className="text-slate-700 font-normal text-lg md:text-[18px] max-w-2xl mx-auto">
             Desarrollamos tecnología que se adapta a tus necesidades y a las de tus clientes.
