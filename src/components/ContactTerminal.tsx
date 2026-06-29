@@ -3,12 +3,12 @@ import { MessageCircle } from 'lucide-react';
 
 export default function ContactTerminal() {
   return (
-    <section id="contacto" className="py-24 px-6 bg-slate-900 relative overflow-hidden">
+    <section id="contacto" className="py-16 md:py-24 px-4 md:px-8 lg:px-12 bg-slate-900 relative overflow-hidden">
       {/* Background gradients for the dark section */}
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-kindev-cyan/20 rounded-full blur-[150px] pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-kindev-purple/20 rounded-full blur-[150px] pointer-events-none" />
 
-      <div className="container mx-auto max-w-4xl relative z-10">
+      <div className="container mx-auto max-w-5xl relative z-10">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
