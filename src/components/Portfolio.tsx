@@ -35,6 +35,7 @@ function ProjectCard({ project, index }: { project: any, index: number }) {
       transition={{ delay: index * 0.2 }}
       className="relative group bg-white rounded-3xl p-8 border border-slate-200 shadow-sm hover:shadow-xl transition-all cursor-pointer overflow-hidden"
       onClick={() => setShowOverlay(true)}
+      onMouseEnter={() => setShowOverlay(true)}
       onMouseLeave={() => setShowOverlay(false)}
     >
       <div className="flex items-start justify-between mb-6">
