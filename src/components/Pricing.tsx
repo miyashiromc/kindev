@@ -5,7 +5,7 @@ export default function Pricing() {
     <section id="precios" className="relative flex flex-col items-center py-10 md:py-16 bg-white overflow-hidden">
       <div className="mb-10 md:text-center z-10 px-6">
         <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 text-slate-900">Inversión Transparente</h2>
-        <p className="text-slate-700 font-normal text-lg md:text-[18px] max-w-2xl mx-auto text-justify">
+        <p className="text-slate-700 font-normal text-lg md:text-[18px] max-w-2xl mx-auto text-justify hyphens-auto">
           Precios claros para soluciones que impulsan tu negocio. Sin costos ocultos.
         </p>
       </div>
@@ -23,7 +23,7 @@ export default function Pricing() {
           <div className="mb-4 text-[40px] font-mono tracking-tighter font-bold text-slate-900">
             <span className="text-[20px] font-sans text-slate-500 font-medium mr-1">desde</span>$400
           </div>
-          <p className="text-sm text-slate-500 mb-6 text-justify">Sistemas a medida para tu negocio.</p>
+          <p className="text-sm text-slate-500 mb-6 text-justify hyphens-auto">Sistemas a medida para tu negocio.</p>
           <ul className="mb-8 space-y-3 text-[15px] font-normal text-slate-700">
             <li className="flex items-center"><span className="mr-2 text-kindev-emerald font-bold">✓</span>Base de Datos y Backend</li>
             <li className="flex items-center"><span className="mr-2 text-kindev-emerald font-bold">✓</span>Panel de Administración</li>
@@ -52,7 +52,7 @@ export default function Pricing() {
           </motion.div>
           <div className="mb-2 text-[20px] font-display font-bold text-kindev-cyan">Página Web</div>
           <div className="mb-2 text-[48px] font-mono tracking-tighter font-bold">$120</div>
-          <p className="text-sm text-slate-400 mb-6 text-justify">Pago único. Ideal para presencia digital.</p>
+          <p className="text-sm text-slate-400 mb-6 text-justify hyphens-auto">Pago único. Ideal para presencia digital.</p>
           <ul className="mb-8 space-y-3 text-[15px] font-normal text-slate-200">
             <li className="flex items-center"><span className="mr-2 text-kindev-emerald font-bold">✓</span>Landing Page (One Page)</li>
             <li className="flex items-center"><span className="mr-2 text-kindev-emerald font-bold">✓</span>Diseño Responsivo</li>
@@ -74,7 +74,7 @@ export default function Pricing() {
         >
           <div className="mb-2 text-[20px] font-display font-bold text-slate-800">App Móvil Android</div>
           <div className="mb-4 text-[32px] font-mono tracking-tight font-bold text-slate-900">A medida</div>
-          <p className="text-sm text-slate-500 mb-6 text-justify">Se cotiza según requerimientos.</p>
+          <p className="text-sm text-slate-500 mb-6 text-justify hyphens-auto">Se cotiza según requerimientos.</p>
           <ul className="mb-8 space-y-3 text-[15px] font-normal text-slate-700">
             <li className="flex items-center"><span className="mr-2 text-kindev-emerald font-bold">✓</span>Apps Android Nativas</li>
             <li className="flex items-center"><span className="mr-2 text-kindev-emerald font-bold">✓</span>Tiendas Online Escalables</li>
