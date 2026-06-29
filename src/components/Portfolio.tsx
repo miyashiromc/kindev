@@ -15,6 +15,7 @@ const projects = [
     name: "UniGuru",
     description: "\"Transformamos Retos Académicos en Éxitos\". Plataforma que conecta estudiantes con expertos a través de un sistema Kanban de solicitudes, chat en vivo y validación de pagos seguros.",
     url: "https://unigurutz.web.app/",
+    playStoreUrl: "https://play.google.com/store/apps/details?id=com.uniguru.app",
     tags: ["EdTech", "Tiempo Real", "Pagos"],
     color: "from-kindev-emerald to-teal-700",
     letter: "U",
@@ -77,10 +78,22 @@ export default function Portfolio() {
                 ))}
               </div>
 
-              <div className="flex items-center gap-2 text-[14px] font-medium text-kindev-emerald bg-kindev-emerald/10 px-4 py-2 rounded-xl inline-flex">
-                <Smartphone size={16} />
-                <span>Disponible en Play Store</span>
-              </div>
+              {project.playStoreUrl ? (
+                <a 
+                  href={project.playStoreUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="flex items-center gap-2 text-[14px] font-semibold text-white bg-slate-900 hover:bg-kindev-emerald px-4 py-2.5 rounded-xl inline-flex transition-all hover:-translate-y-0.5 shadow-md"
+                >
+                  <Smartphone size={16} />
+                  <span>Obtener en Play Store</span>
+                </a>
+              ) : (
+                <div className="flex items-center gap-2 text-[14px] font-medium text-kindev-emerald bg-kindev-emerald/10 px-4 py-2.5 rounded-xl inline-flex">
+                  <Smartphone size={16} />
+                  <span>App Android Nativa</span>
+                </div>
+              )}
             </motion.div>
           ))}
         </div>
