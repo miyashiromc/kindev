@@ -14,11 +14,11 @@ export default function Navbar() {
         className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 bg-white/80 backdrop-blur-md border-b border-slate-200"
       >
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 md:w-14 md:h-14 flex items-center justify-center">
+          <div className="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center">
             <img 
               src="/kindev-logo.png" 
               alt="Kindev Logo" 
-              className="w-full h-full object-contain scale-[1.3]"
+              className="w-full h-full object-contain scale-[1.5]"
               onError={(e) => {
                 // Fallback if logo not yet uploaded
                 (e.target as HTMLImageElement).style.display = 'none';
