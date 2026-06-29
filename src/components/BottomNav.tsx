@@ -32,8 +32,8 @@ export default function BottomNav() {
   ];
 
   return (
-    <div className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-[400px]">
-      <div className="flex justify-between items-center bg-white/85 backdrop-blur-xl border border-slate-200/50 shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-3xl px-2 py-2">
+    <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 w-full bg-white/90 backdrop-blur-xl border-t border-slate-200/50 pb-safe shadow-[0_-4px_20px_rgb(0,0,0,0.05)]">
+      <div className="flex justify-around items-center px-2 py-2">
         {navItems.map(({ id, label, icon: Icon, href }) => {
           const isActive = active === id;
           return (
