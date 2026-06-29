@@ -1,9 +1,6 @@
-import { motion, AnimatePresence } from 'motion/react';
-import { Menu, X } from 'lucide-react';
-import { useState } from 'react';
+import { motion } from 'motion/react';
 
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>
@@ -14,11 +11,11 @@ export default function Navbar() {
         className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 bg-white/80 backdrop-blur-md border-b border-slate-200"
       >
         <div className="flex items-center gap-3">
-          <div className="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center">
+          <div className="w-12 h-12 md:w-14 md:h-14 flex items-center justify-center">
             <img 
               src="/kindev-logo.png" 
               alt="Kindev Logo" 
-              className="w-full h-full object-contain scale-[1.5]"
+              className="w-full h-full object-contain scale-[1.3]"
               onError={(e) => {
                 // Fallback if logo not yet uploaded
                 (e.target as HTMLImageElement).style.display = 'none';
@@ -45,41 +42,7 @@ export default function Navbar() {
           </button>
         </div>
 
-        {/* Mobile Menu Toggle */}
-        <button 
-          className="md:hidden p-2 text-slate-600 hover:text-slate-900"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
       </motion.nav>
-
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="fixed inset-0 z-40 top-[72px] bg-white border-b border-slate-200 md:hidden flex flex-col items-center py-8 gap-6 shadow-xl"
-          >
-            <a href="#servicios" onClick={() => setIsOpen(false)} className="text-lg font-medium text-slate-700 hover:text-kindev-cyan transition-colors">Servicios</a>
-            <a href="#proyectos" onClick={() => setIsOpen(false)} className="text-lg font-medium text-slate-700 hover:text-kindev-cyan transition-colors">Proyectos</a>
-            <a href="#precios" onClick={() => setIsOpen(false)} className="text-lg font-medium text-slate-700 hover:text-kindev-cyan transition-colors">Precios</a>
-            <a href="#flujo" onClick={() => setIsOpen(false)} className="text-lg font-medium text-slate-700 hover:text-kindev-cyan transition-colors">Cómo trabajamos</a>
-            
-            <button 
-              onClick={() => {
-                setIsOpen(false);
-                document.getElementById('contacto')?.scrollIntoView({ behavior: 'smooth' });
-              }}
-              className="mt-4 px-8 py-3 text-[15px] font-semibold rounded-full bg-slate-900 text-white hover:bg-slate-800 transition-colors shadow-sm"
-            >
-              Iniciar proyecto
-            </button>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </>
   );
 }
