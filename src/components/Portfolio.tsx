@@ -4,9 +4,9 @@ import { ExternalLink, Smartphone } from 'lucide-react';
 const projects = [
   {
     name: "Kargox",
-    description: "\"Si no lo tenemos, lo conseguimos\". Sistema integral de gestión logística y rastreo con aplicación móvil nativa para Android y panel de administración en tiempo real.",
+    description: "\"Si no lo tenemos, lo conseguimos\". Plataforma que permite a los usuarios cotizar y adquirir productos de tiendas internacionales como Amazon o Temu de forma fácil y segura, con app móvil Android y panel web.",
     url: "https://kargox-ec.web.app/",
-    tags: ["Logística", "App Nativa", "Dashboard"],
+    tags: ["E-commerce", "Importaciones", "App Nativa"],
     color: "from-blue-600 to-indigo-700",
     letter: "K",
     logo: "/assets/logos/kargox-logo.png"
