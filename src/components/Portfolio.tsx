@@ -8,7 +8,8 @@ const projects = [
     url: "https://kargox-ec.web.app/",
     tags: ["Plataforma Web", "App Android", "Logística"],
     color: "from-kindev-cyan to-blue-500",
-    letter: "K"
+    letter: "K",
+    logo: "/assets/logos/kargox-logo.png"
   },
   {
     name: "Unigurutz",
@@ -16,7 +17,8 @@ const projects = [
     url: "https://unigurutz.web.app/",
     tags: ["Web App", "App Android", "Sistema"],
     color: "from-slate-700 to-slate-900",
-    letter: "U"
+    letter: "U",
+    logo: "/assets/logos/uniguru-logo.png"
   }
 ];
 
@@ -42,8 +44,12 @@ export default function Portfolio() {
               className="group bg-white rounded-3xl p-8 border border-slate-200 shadow-sm hover:shadow-xl transition-all"
             >
               <div className="flex items-start justify-between mb-6">
-                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${project.color} flex items-center justify-center text-2xl font-bold text-white shadow-lg`}>
-                  {project.letter}
+                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${project.color} flex items-center justify-center text-2xl font-bold text-white shadow-lg overflow-hidden`}>
+                  {project.logo ? (
+                    <img src={project.logo} alt={`${project.name} Logo`} className="w-full h-full object-cover" />
+                  ) : (
+                    project.letter
+                  )}
                 </div>
                 <div className="flex gap-2">
                   <a 

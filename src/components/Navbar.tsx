@@ -16,7 +16,7 @@ export default function Navbar() {
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 flex items-center justify-center">
             <img 
-              src="/logo.png" 
+              src="/kindev-logo.png" 
               alt="Kindev Logo" 
               className="w-full h-full object-contain"
               onError={(e) => {
