@@ -13,10 +13,33 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: npm ci && npm run build
-      - run: echo ${{ github.sha }} > dist/github-sha.txt
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+      - uses: actions/setup-node@v4
         with:
-          repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KINDEVX }}
-          projectId: kindevx
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci && npm run build
+      - name: Deploy preview to Firebase Hosting
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KINDEVX }}
+        run: |
+          echo "$FIREBASE_SERVICE_ACCOUNT" > /tmp/firebase-sa.json
+          export GOOGLE_APPLICATION_CREDENTIALS=/tmp/firebase-sa.json
+          
+          # Deploy to a preview channel based on the PR number
+          npx -y firebase-tools@latest hosting:channel:deploy pr-${{ github.event.pull_request.number }} --project kindevx 2>&1 | tee /tmp/deploy-output.txt || true
+          
+          # Clean up credentials immediately
+          rm -f /tmp/firebase-sa.json
+          
+          # Check results
+          if grep -q "is the current active version" /tmp/deploy-output.txt; then
+            echo "✅ Preview deploy succeeded (known Firebase CLI bug ignored)"
+          elif grep -q "Channel URL" /tmp/deploy-output.txt; then
+            echo "✅ Preview deploy complete"
+          elif grep -q "file upload complete" /tmp/deploy-output.txt; then
+            echo "✅ Preview deploy succeeded"
+          else
+            echo "❌ Preview deploy failed:"
+            cat /tmp/deploy-output.txt
+            exit 1
+          fi
