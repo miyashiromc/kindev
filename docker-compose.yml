@@ -1,0 +1,31 @@
+services:
+  # ──────────────────────────────────────────
+  # Development: Vite dev server with HMR
+  # Run: docker-compose up
+  # ──────────────────────────────────────────
+  web:
+    build:
+      context: .
+      target: dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules    # Prevent host node_modules from overwriting container's
+    environment:
+      - NODE_ENV=development
+    env_file:
+      - .env.local           # Load secrets from local .env file (never committed)
+
+  # ──────────────────────────────────────────
+  # Production: Nginx serving built assets
+  # Run: docker-compose --profile production up web-prod
+  # ──────────────────────────────────────────
+  web-prod:
+    build:
+      context: .
+      target: production
+    ports:
+      - "8080:80"
+    profiles:
+      - production

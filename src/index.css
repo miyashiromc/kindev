@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-display: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+
+  --color-kindev-emerald: #10b981;
+  --color-kindev-cyan: #06b6d4;
+  --color-kindev-purple: #8b5cf6;
+  --color-kindev-dark: #1E293B; /* Charcoal gray */
+  --color-kindev-bg: #FFFFFF; /* Pure white */
+  --color-kindev-surface: #F8F9FA; /* Pearl gray */
+}
+
+body {
+  background-color: var(--color-kindev-bg);
+  color: var(--color-kindev-dark);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-kindev-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}

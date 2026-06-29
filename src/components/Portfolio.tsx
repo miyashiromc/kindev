@@ -1,0 +1,84 @@
+import { motion } from 'motion/react';
+import { ExternalLink, Smartphone } from 'lucide-react';
+
+const projects = [
+  {
+    name: "Kargox",
+    description: "Sistema de gestión logística y aplicación móvil. Diseñado para un rendimiento fluido tanto en web como en dispositivos Android nativos.",
+    url: "https://kargox-ec.web.app/",
+    tags: ["Plataforma Web", "App Android", "Logística"],
+    color: "from-kindev-cyan to-blue-500",
+    letter: "K"
+  },
+  {
+    name: "Unigurutz",
+    description: "Plataforma digital integral disponible en web y aplicación móvil en la Play Store. Experiencia de usuario optimizada y sincronización en tiempo real.",
+    url: "https://unigurutz.web.app/",
+    tags: ["Web App", "App Android", "Sistema"],
+    color: "from-slate-700 to-slate-900",
+    letter: "U"
+  }
+];
+
+export default function Portfolio() {
+  return (
+    <section id="proyectos" className="py-24 px-6 bg-slate-50">
+      <div className="container mx-auto max-w-6xl">
+        <div className="mb-16 md:text-center">
+          <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 text-slate-900">Casos de Éxito</h2>
+          <p className="text-slate-700 font-normal text-lg md:text-[18px] max-w-2xl mx-auto">
+            Proyectos reales funcionando en producción. Desde plataformas web completas hasta aplicaciones publicadas en la Play Store.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {projects.map((project, index) => (
+            <motion.div
+              key={project.name}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.2 }}
+              className="group bg-white rounded-3xl p-8 border border-slate-200 shadow-sm hover:shadow-xl transition-all"
+            >
+              <div className="flex items-start justify-between mb-6">
+                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${project.color} flex items-center justify-center text-2xl font-bold text-white shadow-lg`}>
+                  {project.letter}
+                </div>
+                <div className="flex gap-2">
+                  <a 
+                    href={project.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-600 hover:bg-kindev-cyan hover:text-white transition-colors border border-slate-200 hover:border-kindev-cyan"
+                    title="Visitar Web"
+                  >
+                    <ExternalLink size={18} />
+                  </a>
+                </div>
+              </div>
+              
+              <h3 className="text-[22px] font-display font-bold mb-3 text-slate-900">{project.name}</h3>
+              <p className="text-slate-700 font-normal text-[16px] leading-[1.6] mb-6">
+                {project.description}
+              </p>
+              
+              <div className="flex flex-wrap gap-2 mb-6">
+                {project.tags.map(tag => (
+                  <span key={tag} className="px-3 py-1 bg-slate-100 border border-slate-200 rounded-md font-mono text-[12px] uppercase tracking-widest text-slate-600">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+
+              <div className="flex items-center gap-2 text-[14px] font-medium text-kindev-emerald bg-kindev-emerald/10 px-4 py-2 rounded-xl inline-flex">
+                <Smartphone size={16} />
+                <span>Disponible en Play Store</span>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
