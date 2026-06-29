@@ -87,7 +87,7 @@ export default function Hero() {
   const { displayed, done } = useTypewriter("Nos alegra que estés aquí. El buen gusto siempre nos encuentra. Entonces, ¿qué vamos a construir hoy?");
 
   return (
-    <section className="relative md:min-h-[85vh] flex flex-col items-center justify-center pt-24 pb-8 md:py-20 px-4 md:px-8 overflow-hidden">
+    <section className="relative flex flex-col items-center justify-center pt-28 pb-12 md:pt-36 md:pb-16 px-4 md:px-8 overflow-hidden">
       {/* Video Background with Scrubbing Effect */}
       <div className="fixed inset-0 -z-20">
         <video
@@ -102,7 +102,7 @@ export default function Hero() {
       {/* Soft Overlay to match Kindev style and ensure text readability */}
       <div className="fixed inset-0 bg-white/85 backdrop-blur-[4px] -z-10" />
 
-      <div className="container mx-auto px-6 relative z-10 max-w-5xl flex flex-col items-start md:items-center text-justify hyphens-auto">
+      <div className="container mx-auto px-6 relative z-10 max-w-5xl flex flex-col items-center text-center">
         
         {/* Morphing Headline */}
         <motion.h1 
