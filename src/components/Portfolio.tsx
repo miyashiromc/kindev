@@ -46,7 +46,7 @@ export default function Portfolio() {
               <div className="flex items-start justify-between mb-6">
                 <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${project.color} flex items-center justify-center text-2xl font-bold text-white shadow-lg overflow-hidden`}>
                   {project.logo ? (
-                    <img src={project.logo} alt={`${project.name} Logo`} className="w-full h-full object-cover" />
+                    <img src={project.logo} alt={`${project.name} Logo`} className="w-full h-full object-contain bg-white p-1" />
                   ) : (
                     project.letter
                   )}
