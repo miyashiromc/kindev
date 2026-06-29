@@ -4,19 +4,19 @@ import { ExternalLink, Smartphone } from 'lucide-react';
 const projects = [
   {
     name: "Kargox",
-    description: "Sistema de gestión logística y aplicación móvil. Diseñado para un rendimiento fluido tanto en web como en dispositivos Android nativos.",
+    description: "Ecosistema integral de gestión logística y rastreo. Aplicación móvil nativa para Android y panel web de administración con sincronización en tiempo real para optimizar el flujo de carga.",
     url: "https://kargox-ec.web.app/",
-    tags: ["Plataforma Web", "App Android", "Logística"],
-    color: "from-kindev-cyan to-blue-500",
+    tags: ["Logística", "App Nativa", "Dashboard"],
+    color: "from-blue-600 to-indigo-700",
     letter: "K",
     logo: "/assets/logos/kargox-logo.png"
   },
   {
-    name: "Unigurutz",
-    description: "Plataforma digital integral disponible en web y aplicación móvil en la Play Store. Experiencia de usuario optimizada y sincronización en tiempo real.",
+    name: "UniGuru",
+    description: "Plataforma académica que conecta estudiantes con asesores expertos. Cuenta con un sistema Kanban de solicitudes, chat en vivo, y validación de pagos seguros en una experiencia web y móvil premium.",
     url: "https://unigurutz.web.app/",
-    tags: ["Web App", "App Android", "Sistema"],
-    color: "from-slate-700 to-slate-900",
+    tags: ["EdTech", "Tiempo Real", "Pagos"],
+    color: "from-kindev-emerald to-teal-700",
     letter: "U",
     logo: "/assets/logos/uniguru-logo.png"
   }
