@@ -6,21 +6,34 @@ export default function BottomNav() {
   const [active, setActive] = useState('home');
 
   useEffect(() => {
-    const handleScroll = () => {
-      const sections = ['home', 'servicios', 'proyectos', 'precios', 'contacto'];
-      const scrollPosition = window.scrollY + 100;
-
-      for (const section of sections.reverse()) {
-        const element = document.getElementById(section === 'home' ? 'root' : section);
-        if (element && element.offsetTop <= scrollPosition) {
-          setActive(section);
-          break;
+    const sections = ['home', 'servicios', 'proyectos', 'precios', 'contacto'];
+    
+    // Configurar IntersectionObserver
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          // Si el elemento intercepta al menos el 50%, lo marcamos activo
+          const id = entry.target.id;
+          setActive(id === 'root' ? 'home' : id);
         }
-      }
-    };
+      });
+    }, {
+      root: null, // Observa respecto al viewport completo
+      threshold: 0.5 // Se activa cuando al menos el 50% del elemento es visible
+    });
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    // Observar cada sección
+    sections.forEach(section => {
+      const elementId = section === 'home' ? 'root' : section;
+      const element = document.getElementById(elementId);
+      if (element) {
+        observer.observe(element);
+      }
+    });
+
+    return () => {
+      observer.disconnect();
+    };
   }, []);
 
   const navItems = [
