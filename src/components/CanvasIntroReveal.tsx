@@ -225,8 +225,8 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
             const logicalX = x / dpr;
             const logicalY = y / dpr;
             
-            // Shorter delay span for a much faster, explosive simultaneous reveal
-            const delay = (logicalX - textX) * 1.5 + Math.random() * 40;
+            // Extremely short delay span so the whole word reveals almost instantly
+            const delay = (logicalX - textX) * 0.4 + Math.random() * 10;
             particles.push(new Particle(logicalX, logicalY, color, delay));
           }
         }
@@ -301,8 +301,8 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
         ctx.restore();
       }
 
-      // Phase 4: Trigger completion after 2600ms
-      if (elapsed > 2600 && !isCompleteTriggered) {
+      // Phase 4: Trigger completion after 3200ms
+      if (elapsed > 3200 && !isCompleteTriggered) {
         isCompleteTriggered = true;
         onComplete();
       }
