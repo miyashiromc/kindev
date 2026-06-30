@@ -42,7 +42,7 @@ export default function IntroAnimation({ onComplete }: IntroAnimationProps) {
         // If it has a black background, this CSS alone won't work on a white container,
         // you would need to use a black container (bg-black) with mix-blend-screen.
         // For now, let's use mix-blend-multiply so it doesn't turn the screen white.
-        className="w-full h-[50vh] md:h-full object-cover mix-blend-multiply"
+        className="w-full h-[90vh] md:h-full object-contain md:object-cover mix-blend-multiply"
       />
     </div>
   );
