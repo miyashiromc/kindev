@@ -14,7 +14,7 @@ export default function BottomNav() {
         if (entry.isIntersecting) {
           // Si el elemento intercepta al menos el 50%, lo marcamos activo
           const id = entry.target.id;
-          setActive(id === 'root' ? 'home' : id);
+          setActive(id === 'inicio' ? 'home' : id);
         }
       });
     }, {
@@ -24,7 +24,7 @@ export default function BottomNav() {
 
     // Observar cada sección
     sections.forEach(section => {
-      const elementId = section === 'home' ? 'root' : section;
+      const elementId = section === 'home' ? 'inicio' : section;
       const element = document.getElementById(elementId);
       if (element) {
         observer.observe(element);
@@ -37,7 +37,7 @@ export default function BottomNav() {
   }, []);
 
   const navItems = [
-    { id: 'home', label: 'Inicio', icon: Sparkles, href: '#root' },
+    { id: 'home', label: 'Inicio', icon: Sparkles, href: '#inicio' },
     { id: 'servicios', label: 'Servicios', icon: Layers, href: '#servicios' },
     { id: 'proyectos', label: 'Proyectos', icon: BriefcaseBusiness, href: '#proyectos' },
     { id: 'precios', label: 'Precios', icon: BadgeDollarSign, href: '#precios' },
