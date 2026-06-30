@@ -106,9 +106,9 @@ export default function CanvasLogoReveal() {
         // 2. Mouse Repulsion
         if (mouseX !== -100) {
           const distToMouse = Math.sqrt((this.x - mouseX) ** 2 + (this.y - mouseY) ** 2);
-          if (distToMouse < 25) {
+          if (distToMouse < 12) {
             const angle = Math.atan2(this.y - mouseY, this.x - mouseX);
-            const force = (25 - distToMouse) * 0.8; // stronger repulsion
+            const force = (12 - distToMouse) * 1.5; // stronger force for smaller radius
             forceX += Math.cos(angle) * force;
             forceY += Math.sin(angle) * force;
           }
