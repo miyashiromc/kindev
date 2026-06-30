@@ -26,7 +26,8 @@ export default function IntroAnimation({ onComplete }: IntroAnimationProps) {
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex items-center justify-center bg-kindev-bg transition-opacity duration-500 ${
+      onClick={handleComplete}
+      className={`fixed inset-0 z-50 flex items-center justify-center bg-kindev-bg transition-opacity duration-500 cursor-pointer ${
         isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'
       }`}
     >
