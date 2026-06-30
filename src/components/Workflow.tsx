@@ -36,7 +36,7 @@ const steps = [
 
 export default function Workflow() {
   return (
-    <section id="flujo" className="py-10 md:py-16 px-4 md:px-8 lg:px-12 bg-kindev-surface overflow-hidden">
+    <section id="flujo" className="snap-start h-screen w-full flex items-center justify-center px-4 md:px-8 lg:px-12 bg-kindev-surface relative overflow-hidden">
       <div className="container mx-auto max-w-7xl">
         <div className="mb-20 md:text-center">
           <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 text-slate-900">¿Cómo trabajamos?</h2>

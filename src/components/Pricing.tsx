@@ -2,7 +2,7 @@ import { motion } from 'motion/react';
 
 export default function Pricing() {
   return (
-    <section id="precios" className="relative flex flex-col items-center py-10 md:py-16 bg-white overflow-hidden">
+    <section id="precios" className="snap-start h-screen w-full flex flex-col items-center justify-center bg-white relative overflow-hidden">
       <div className="mb-16 md:mb-24 md:text-center z-10 px-6 relative">
         <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 text-slate-900">Inversión Transparente</h2>
         <p className="text-slate-700 font-normal text-lg md:text-[18px] max-w-2xl mx-auto text-center md:text-center hyphens-auto">

@@ -25,12 +25,18 @@ export default function App() {
   }, [showIntro]);
 
   return (
-    <div className="min-h-screen bg-kindev-bg text-kindev-dark font-sans selection:bg-kindev-cyan/30 overflow-x-hidden">
+    <div className="h-screen w-full bg-kindev-bg text-kindev-dark font-sans selection:bg-kindev-cyan/30 overflow-hidden relative">
       {showIntro && <IntroAnimation onComplete={() => setShowIntro(false)} />}
       
-      <div className={`transition-opacity duration-1000 opacity-100`}>
+      {/* 
+        This is the main scroll container. 
+        It takes the full screen height and snaps its children. 
+      */}
+      <div className={`transition-opacity duration-1000 h-full w-full ${showIntro ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
         <Navbar />
-        <main className="pb-16 md:pb-0">
+        
+        {/* This is the main scroll container. It takes the full screen height and snaps its children. */}
+        <main className="w-full h-full overflow-y-auto overflow-x-hidden snap-y snap-mandatory scroll-smooth">
           <Hero />
           <ServicesBento />
           <Portfolio />
@@ -38,6 +44,7 @@ export default function App() {
           <Workflow />
           <ContactTerminal />
         </main>
+        
         <BottomNav />
       </div>
     </div>
