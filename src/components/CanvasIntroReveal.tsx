@@ -250,6 +250,8 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
       let logoAlpha = 0;
       let logoScale = 0.5;
       let currentLogoX = startLogoX;
+      
+      const initialScale = isMobile ? 2.5 : 1.5; // Massive initial size
 
       // Phase 1: Logo Entrance (0 - 800ms)
       if (elapsed < 800) {
@@ -257,21 +259,23 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
         // EaseOutBack for a slight overshoot popping effect
         const ease = 1 - Math.pow(1 - p, 3); 
         logoAlpha = ease;
-        logoScale = 0.5 + 0.5 * ease;
+        logoScale = 0.5 + (initialScale - 0.5) * ease;
       } 
       // Phase 2: Pause & Anticipation (800 - 1000ms)
       else if (elapsed >= 800 && elapsed < 1000) {
         logoAlpha = 1;
-        logoScale = 1;
+        logoScale = initialScale;
       }
       // Phase 3: Slide and Explode (1000ms+)
       else if (elapsed >= 1000) {
         logoAlpha = 1;
-        logoScale = 1;
         const slideElapsed = elapsed - 1000;
         const progress = Math.min(slideElapsed / 1200, 1);
         // Exponential ease out for a snappy slide
         const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+        
+        // Shrink down to normal size as it slides
+        logoScale = initialScale - (initialScale - 1.0) * ease;
         currentLogoX = startLogoX - (startLogoX - finalLogoX) * ease;
       }
 
