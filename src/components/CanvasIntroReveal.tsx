@@ -91,9 +91,9 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
         this.x = startLogoX + logoSize / 2;
         this.y = centerY;
         
-        // Massive initial explosive velocity in all directions
+        // Massive initial explosive velocity in all directions (reduced on mobile)
         const angle = Math.random() * Math.PI * 2;
-        const speed = Math.random() * 50 + 10;
+        const speed = isMobile ? Math.random() * 25 + 5 : Math.random() * 50 + 10;
         this.vx = Math.cos(angle) * speed;
         this.vy = Math.sin(angle) * speed;
         
@@ -154,8 +154,8 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
           }
         });
 
-        // Moderate spring force, reduced for mobile to account for shorter travel distances
-        const springForce = isMobile ? 0.04 : 0.10;
+        // Moderate spring force, significantly reduced for mobile for a much slower, graceful assembly
+        const springForce = isMobile ? 0.02 : 0.10;
         this.vx += dx * springForce + forceX;
         this.vy += dy * springForce + forceY;
         
