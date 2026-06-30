@@ -27,15 +27,15 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
     const img = new Image();
     img.src = '/kindev-logo.png';
 
-    // Responsive sizing
+    // Responsive sizing (made significantly larger for desktop)
     const isMobile = logicalWidth < 768;
-    const logoSize = isMobile ? 120 : 220; // Big logo matching video presence
-    const fontSize = isMobile ? 48 : 100; // Giant text
-    const textOffsetX = logoSize + (isMobile ? 10 : 20); // Text starts right after logo
+    const logoSize = isMobile ? 120 : 320; 
+    const fontSize = isMobile ? 48 : 150; 
+    const textOffsetX = logoSize + (isMobile ? 10 : 30); 
     const centerX = logicalWidth / 2;
     const centerY = logicalHeight / 2;
     // The logo starts centered, then slides left to make room for text
-    const totalContentWidth = textOffsetX + (isMobile ? 200 : 450); // approx text width
+    const totalContentWidth = textOffsetX + (isMobile ? 200 : 650);
     const finalLogoX = centerX - totalContentWidth / 2;
     const startLogoX = centerX - logoSize / 2; // Start centered
 
@@ -198,7 +198,7 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
       offCtx.textBaseline = 'middle';
       
       const textX = finalLogoX + textOffsetX;
-      const gradient = offCtx.createLinearGradient(textX, 0, textX + (isMobile ? 200 : 450), 0);
+      const gradient = offCtx.createLinearGradient(textX, 0, textX + (isMobile ? 200 : 650), 0);
       gradient.addColorStop(0, '#06b6d4');
       gradient.addColorStop(0.5, '#10b981');
       gradient.addColorStop(1, '#8b5cf6');
