@@ -28,13 +28,15 @@ export default function CanvasLogoReveal() {
     let mouseY = -100;
     let waves: { x: number, y: number, radius: number }[] = [];
 
-    const handleMouseMove = (e: MouseEvent) => {
+    const handlePointerMove = (e: PointerEvent) => {
+      // Ignore touch moves to prevent stuck hover on mobile, or handle them via pointerType
+      if (e.pointerType === 'touch') return;
       const rect = canvas.getBoundingClientRect();
       mouseX = e.clientX - rect.left;
       mouseY = e.clientY - rect.top;
     };
 
-    const handleMouseLeave = () => {
+    const handlePointerLeave = () => {
       mouseX = -100;
       mouseY = -100;
     };
@@ -50,13 +52,15 @@ export default function CanvasLogoReveal() {
         radius: 0
       });
 
-      // Original click behavior (smooth scroll to top)
       document.getElementById('inicio')?.scrollIntoView({ behavior: 'smooth' });
     };
 
-    canvas.addEventListener('mousemove', handleMouseMove);
-    canvas.addEventListener('mouseleave', handleMouseLeave);
+    // Use modern pointer events to handle both mouse and touch correctly
+    canvas.addEventListener('pointermove', handlePointerMove);
+    canvas.addEventListener('pointerleave', handlePointerLeave);
     canvas.addEventListener('pointerdown', handleInteraction);
+    canvas.addEventListener('pointerup', handlePointerLeave);
+    canvas.addEventListener('pointercancel', handlePointerLeave);
     
     class Particle {
       x: number;
@@ -270,9 +274,11 @@ export default function CanvasLogoReveal() {
 
     return () => {
       cancelAnimationFrame(animationFrameId);
-      canvas.removeEventListener('mousemove', handleMouseMove);
-      canvas.removeEventListener('mouseleave', handleMouseLeave);
+      canvas.removeEventListener('pointermove', handlePointerMove);
+      canvas.removeEventListener('pointerleave', handlePointerLeave);
       canvas.removeEventListener('pointerdown', handleInteraction);
+      canvas.removeEventListener('pointerup', handlePointerLeave);
+      canvas.removeEventListener('pointercancel', handlePointerLeave);
     };
   }, []);
 
