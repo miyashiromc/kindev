@@ -22,6 +22,48 @@ export default function CanvasLogoReveal() {
 
     const img = new Image();
     img.src = '/kindev-logo.png';
+
+    // Interactivity state
+    let mouseX = -100;
+    let mouseY = -100;
+    let waves: { x: number, y: number, radius: number }[] = [];
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      mouseX = e.clientX - rect.left;
+      mouseY = e.clientY - rect.top;
+    };
+
+    const handleMouseLeave = () => {
+      mouseX = -100;
+      mouseY = -100;
+    };
+
+    const handleInteraction = (e: MouseEvent | TouchEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      let clientX, clientY;
+      if ('touches' in e && e.touches.length > 0) {
+        clientX = e.touches[0].clientX;
+        clientY = e.touches[0].clientY;
+      } else {
+        clientX = (e as MouseEvent).clientX;
+        clientY = (e as MouseEvent).clientY;
+      }
+      
+      waves.push({
+        x: clientX - rect.left,
+        y: clientY - rect.top,
+        radius: 0
+      });
+
+      // Original click behavior (smooth scroll to top)
+      document.getElementById('inicio')?.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    canvas.addEventListener('mousemove', handleMouseMove);
+    canvas.addEventListener('mouseleave', handleMouseLeave);
+    canvas.addEventListener('mousedown', handleInteraction);
+    canvas.addEventListener('touchstart', handleInteraction, { passive: true });
     
     class Particle {
       x: number;
@@ -56,16 +98,41 @@ export default function CanvasLogoReveal() {
         const dx = this.originX - this.x;
         const dy = this.originY - this.y;
         
-        // Push particles away from the moving logo
-        const distToLogo = Math.sqrt((this.x - logoX) ** 2 + (this.y - logicalHeight/2) ** 2);
         let forceX = 0;
         let forceY = 0;
+
+        // 1. Push particles away from the moving logo
+        const distToLogo = Math.sqrt((this.x - logoX) ** 2 + (this.y - logicalHeight/2) ** 2);
         if (distToLogo < 25) {
           const angle = Math.atan2(this.y - logicalHeight/2, this.x - logoX);
           const force = (25 - distToLogo) * 0.4;
-          forceX = Math.cos(angle) * force;
-          forceY = Math.sin(angle) * force;
+          forceX += Math.cos(angle) * force;
+          forceY += Math.sin(angle) * force;
         }
+
+        // 2. Mouse Repulsion
+        if (mouseX !== -100) {
+          const distToMouse = Math.sqrt((this.x - mouseX) ** 2 + (this.y - mouseY) ** 2);
+          if (distToMouse < 25) {
+            const angle = Math.atan2(this.y - mouseY, this.x - mouseX);
+            const force = (25 - distToMouse) * 0.8; // stronger repulsion
+            forceX += Math.cos(angle) * force;
+            forceY += Math.sin(angle) * force;
+          }
+        }
+
+        // 3. Wave effect on tap
+        waves.forEach(wave => {
+          const distToWaveCenter = Math.sqrt((this.x - wave.x) ** 2 + (this.y - wave.y) ** 2);
+          const distFromWaveFront = Math.abs(distToWaveCenter - wave.radius);
+          if (distFromWaveFront < 12) {
+            const angle = Math.atan2(this.y - wave.y, this.x - wave.x);
+            // Push outwards and slightly upwards for a splash effect
+            const force = (12 - distFromWaveFront) * 1.5;
+            forceX += Math.cos(angle) * force;
+            forceY += Math.sin(angle) * force - force * 0.3;
+          }
+        });
 
         // Spring force towards origin
         this.vx += dx * 0.05 + forceX;
@@ -145,6 +212,10 @@ export default function CanvasLogoReveal() {
       
       ctx.clearRect(0, 0, logicalWidth, logicalHeight);
 
+      // Update waves
+      waves.forEach(w => w.radius += 5);
+      waves = waves.filter(w => w.radius < logicalWidth * 1.5); // Remove dead waves
+
       // Logo animation: start at x=55, move to x=0 over 800ms
       let logoX = 55;
       if (elapsed > 0) {
@@ -195,6 +266,10 @@ export default function CanvasLogoReveal() {
 
     return () => {
       cancelAnimationFrame(animationFrameId);
+      canvas.removeEventListener('mousemove', handleMouseMove);
+      canvas.removeEventListener('mouseleave', handleMouseLeave);
+      canvas.removeEventListener('mousedown', handleInteraction);
+      canvas.removeEventListener('touchstart', handleInteraction);
     };
   }, []);
 
@@ -202,7 +277,6 @@ export default function CanvasLogoReveal() {
     <canvas 
       ref={canvasRef} 
       className="cursor-pointer"
-      onClick={() => document.getElementById('inicio')?.scrollIntoView({ behavior: 'smooth' })}
     />
   );
 }
