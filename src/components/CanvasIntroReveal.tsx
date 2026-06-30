@@ -154,21 +154,16 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
           }
         });
 
-        // Stronger spring force for a snappy, satisfying, fast assembly
-        this.vx += dx * 0.18 + forceX;
-        this.vy += dy * 0.18 + forceY;
+        // Very high spring force combined with high friction ensures a direct snap without bouncing
+        this.vx += dx * 0.3 + forceX;
+        this.vy += dy * 0.3 + forceY;
         
-        // Slightly less friction for "bounciness"
-        this.vx *= 0.85;
-        this.vy *= 0.85;
+        // High friction (damping) to kill momentum instantly
+        this.vx *= 0.55;
+        this.vy *= 0.55;
         
         this.x += this.vx;
         this.y += this.vy;
-
-        // Subtle floating/breathing effect once mostly settled
-        if (slideTime > 1500 && Math.abs(dx) < 2 && Math.abs(dy) < 2) {
-          this.y += Math.sin(elapsed * 0.003 + this.randomSeed) * 0.3;
-        }
       }
 
       draw(ctx: CanvasRenderingContext2D) {
