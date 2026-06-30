@@ -76,7 +76,7 @@ export default function IntroAnimation({ onComplete }: IntroAnimationProps) {
       className={`fixed inset-0 z-50 flex items-center justify-center transition-opacity duration-500 cursor-pointer ${
         isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'
       }`}
-      style={{ backgroundColor: bgColor }}
+      style={{ backgroundColor: phase === 'logo' ? '#ffffff' : bgColor }}
     >
       {phase === 'video' && (
         <>
@@ -102,9 +102,7 @@ export default function IntroAnimation({ onComplete }: IntroAnimationProps) {
       )}
 
       {phase === 'logo' && (
-        <div className="flex items-center justify-center w-full h-full animate-in fade-in duration-500">
-          <CanvasIntroReveal onComplete={handleFinalComplete} />
-        </div>
+        <CanvasIntroReveal onComplete={handleFinalComplete} />
       )}
     </div>
   );

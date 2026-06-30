@@ -14,9 +14,9 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
     if (!ctx) return;
 
     const dpr = window.devicePixelRatio || 1;
-    // Doubled dimensions for giant intro reveal
-    const logicalWidth = 480;
-    const logicalHeight = 120;
+    // Full viewport dimensions
+    const logicalWidth = window.innerWidth;
+    const logicalHeight = window.innerHeight;
     
     canvas.width = logicalWidth * dpr;
     canvas.height = logicalHeight * dpr;
@@ -26,6 +26,18 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
 
     const img = new Image();
     img.src = '/kindev-logo.png';
+
+    // Responsive sizing
+    const isMobile = logicalWidth < 768;
+    const logoSize = isMobile ? 120 : 220; // Big logo matching video presence
+    const fontSize = isMobile ? 48 : 100; // Giant text
+    const textOffsetX = logoSize + (isMobile ? 10 : 20); // Text starts right after logo
+    const centerX = logicalWidth / 2;
+    const centerY = logicalHeight / 2;
+    // The logo starts centered, then slides left to make room for text
+    const totalContentWidth = textOffsetX + (isMobile ? 200 : 450); // approx text width
+    const finalLogoX = centerX - totalContentWidth / 2;
+    const startLogoX = centerX - logoSize / 2; // Start centered
 
     // Interactivity state
     let mouseX = -100;
@@ -46,12 +58,9 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
 
     const handleInteraction = (e: PointerEvent) => {
       const rect = canvas.getBoundingClientRect();
-      const clientX = e.clientX;
-      const clientY = e.clientY;
-      
       waves.push({
-        x: clientX - rect.left,
-        y: clientY - rect.top,
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
         radius: 0
       });
     };
@@ -76,19 +85,18 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
       constructor(x: number, y: number, color: string, delay: number) {
         this.originX = x;
         this.originY = y;
-        // Start position is behind the logo initially (x around 110)
-        this.x = 110 + (Math.random() - 0.5) * 30;
-        this.y = logicalHeight / 2 + (Math.random() - 0.5) * 30;
+        // Start from behind the logo center
+        this.x = startLogoX + logoSize / 2 + (Math.random() - 0.5) * 40;
+        this.y = centerY + (Math.random() - 0.5) * 40;
         
-        // Initial explosive velocity
-        this.vx = (Math.random() - 0.5) * 20;
-        this.vy = (Math.random() - 0.5) * 20;
+        this.vx = (Math.random() - 0.5) * 25;
+        this.vy = (Math.random() - 0.5) * 25;
         this.color = color;
         this.delay = delay;
         this.active = false;
       }
 
-      update(time: number, logoX: number) {
+      update(time: number, currentLogoRight: number) {
         if (time < this.delay) return;
         this.active = true;
 
@@ -98,11 +106,14 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
         let forceX = 0;
         let forceY = 0;
 
-        // 1. Push particles away from the moving logo (scaled up)
-        const distToLogo = Math.sqrt((this.x - logoX) ** 2 + (this.y - logicalHeight/2) ** 2);
-        if (distToLogo < 50) {
-          const angle = Math.atan2(this.y - logicalHeight/2, this.x - logoX);
-          const force = (50 - distToLogo) * 0.4;
+        // 1. Push particles away from the moving logo edge
+        const distToLogoEdge = Math.sqrt(
+          (this.x - currentLogoRight) ** 2 + (this.y - centerY) ** 2
+        );
+        const repelRadius = isMobile ? 40 : 60;
+        if (distToLogoEdge < repelRadius) {
+          const angle = Math.atan2(this.y - centerY, this.x - currentLogoRight);
+          const force = (repelRadius - distToLogoEdge) * 0.5;
           forceX += Math.cos(angle) * force;
           forceY += Math.sin(angle) * force;
         }
@@ -110,9 +121,10 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
         // 2. Mouse Repulsion
         if (mouseX !== -100) {
           const distToMouse = Math.sqrt((this.x - mouseX) ** 2 + (this.y - mouseY) ** 2);
-          if (distToMouse < 24) {
+          const mouseRadius = isMobile ? 20 : 30;
+          if (distToMouse < mouseRadius) {
             const angle = Math.atan2(this.y - mouseY, this.x - mouseX);
-            const force = (24 - distToMouse) * 1.5;
+            const force = (mouseRadius - distToMouse) * 1.5;
             forceX += Math.cos(angle) * force;
             forceY += Math.sin(angle) * force;
           }
@@ -122,22 +134,19 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
         waves.forEach(wave => {
           const distToWaveCenter = Math.sqrt((this.x - wave.x) ** 2 + (this.y - wave.y) ** 2);
           const distFromWaveFront = Math.abs(distToWaveCenter - wave.radius);
-          if (distFromWaveFront < 40) { 
+          const waveWidth = isMobile ? 30 : 50;
+          if (distFromWaveFront < waveWidth) { 
             const angle = Math.atan2(this.y - wave.y, this.x - wave.x);
-            const force = (40 - distFromWaveFront) * 1.5; 
+            const force = (waveWidth - distFromWaveFront) * 2.0; 
             forceX += Math.cos(angle) * force;
             forceY += Math.sin(angle) * force - force * 0.5;
           }
         });
 
-        // Spring force towards origin
         this.vx += dx * 0.05 + forceX;
         this.vy += dy * 0.05 + forceY;
-        
-        // Friction
         this.vx *= 0.80;
         this.vy *= 0.80;
-        
         this.x += this.vx;
         this.y += this.vy;
       }
@@ -145,8 +154,8 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
       draw(ctx: CanvasRenderingContext2D) {
         if (!this.active) return;
         ctx.fillStyle = this.color;
-        // Particle size scaled up slightly, but still keeping high density
-        ctx.fillRect(this.x, this.y, 1.8, 1.8);
+        const size = isMobile ? 1.5 : 2.0;
+        ctx.fillRect(this.x, this.y, size, size);
       }
     }
 
@@ -164,24 +173,25 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
       offCtx.scale(dpr, dpr);
       offCtx.clearRect(0, 0, logicalWidth, logicalHeight);
       
-      // Draw text - Giant size
-      offCtx.font = '800 60px "Plus Jakarta Sans", sans-serif';
+      // Draw text at the final position (after logo slides left)
+      offCtx.font = `800 ${fontSize}px "Plus Jakarta Sans", sans-serif`;
       offCtx.textBaseline = 'middle';
       
-      // Gradient for text to match Kindev style
-      const gradient = offCtx.createLinearGradient(110, 0, 360, 0);
-      gradient.addColorStop(0, '#06b6d4'); // cyan
-      gradient.addColorStop(0.5, '#10b981'); // emerald
-      gradient.addColorStop(1, '#8b5cf6'); // purple
+      const textX = finalLogoX + textOffsetX;
+      const gradient = offCtx.createLinearGradient(textX, 0, textX + (isMobile ? 200 : 450), 0);
+      gradient.addColorStop(0, '#06b6d4');
+      gradient.addColorStop(0.5, '#10b981');
+      gradient.addColorStop(1, '#8b5cf6');
       offCtx.fillStyle = gradient;
       
-      offCtx.fillText('Kindev', 110, logicalHeight / 2 + 4);
+      offCtx.fillText('Kindev', textX, centerY + 4);
 
       const imageData = offCtx.getImageData(0, 0, renderWidth, renderHeight);
       const data = imageData.data;
 
       particles = [];
-      const step = dpr > 1 ? 2 : 1;
+      // Performance-aware step: less dense on mobile for performance
+      const step = isMobile ? (dpr > 1 ? 3 : 2) : (dpr > 1 ? 2 : 1);
 
       for (let y = 0; y < renderHeight; y += step) {
         for (let x = 0; x < renderWidth; x += step) {
@@ -196,7 +206,8 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
             const logicalX = x / dpr;
             const logicalY = y / dpr;
             
-            const delay = (logicalX - 110) * 8 + Math.random() * 100;
+            // Delay based on distance from text start
+            const delay = (logicalX - textX) * 6 + Math.random() * 150;
             particles.push(new Particle(logicalX, logicalY, color, delay));
           }
         }
@@ -209,41 +220,37 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
 
     const render = () => {
       const currentTime = Date.now();
-      // NO INITIAL DELAY: Starts immediately
       const elapsed = currentTime - startTime;
       
       ctx.clearRect(0, 0, logicalWidth, logicalHeight);
 
-      // Update waves (scaled up wave speed)
-      waves.forEach(w => w.radius += 8);
-      waves = waves.filter(w => w.radius < logicalWidth * 1.5);
+      waves.forEach(w => w.radius += 10);
+      waves = waves.filter(w => w.radius < logicalWidth);
 
-      // Logo animation: start at x=110, move to x=0 over 1200ms (slower for big version)
-      let logoX = 110;
+      // Logo slides from center to final left position over 1200ms
+      let currentLogoX = startLogoX;
       if (elapsed > 0) {
         const progress = Math.min(elapsed / 1200, 1);
-        const ease = 1 - Math.pow(1 - progress, 3); // Cubic ease out
-        logoX = 110 - (110 * ease);
+        const ease = 1 - Math.pow(1 - progress, 3);
+        currentLogoX = startLogoX - (startLogoX - finalLogoX) * ease;
       }
 
       // Update and draw particles
       if (elapsed > 0) {
-        // We pass logoX + 44 (approx center of the giant logo) so particles react to it
+        const logoRight = currentLogoX + logoSize;
         particles.forEach(p => {
-          p.update(elapsed, logoX + 44);
+          p.update(elapsed, logoRight);
           p.draw(ctx);
         });
       }
 
-      // Draw Logo
+      // Draw Logo (big, centered vertically)
       if (img.complete && img.naturalWidth !== 0) {
-        const size = 88; // Giant logo
-        // Draw the logo centered vertically
-        ctx.drawImage(img, logoX, logicalHeight / 2 - size / 2, size, size);
+        ctx.drawImage(img, currentLogoX, centerY - logoSize / 2, logoSize, logoSize);
       }
 
-      // Trigger completion after 2500ms
-      if (elapsed > 2500 && !isCompleteTriggered) {
+      // Trigger completion after 3000ms (a bit longer for the bigger animation)
+      if (elapsed > 3000 && !isCompleteTriggered) {
         isCompleteTriggered = true;
         onComplete();
       }
@@ -265,6 +272,7 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
       }
     };
     
+    // Failsafe
     setTimeout(() => {
       if (particles.length === 0 && img.complete) {
         start();
@@ -284,7 +292,7 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
   return (
     <canvas 
       ref={canvasRef} 
-      className="cursor-pointer max-w-[90vw] object-contain"
+      className="absolute inset-0 w-full h-full"
     />
   );
 }
