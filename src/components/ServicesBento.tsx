@@ -18,7 +18,7 @@ export default function ServicesBento() {
   };
 
   return (
-    <section id="servicios" className="snap-start h-screen w-full flex items-center justify-center px-4 md:px-8 lg:px-12 bg-white relative overflow-hidden">
+    <section id="servicios" className="snap-start min-h-[100dvh] w-full flex items-center justify-center pt-24 pb-28 md:pt-20 md:pb-20 px-4 md:px-8 lg:px-12 bg-white relative overflow-hidden">
       <div className="container mx-auto max-w-7xl">
         <div className="mb-10 md:text-center">
           <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 text-slate-900">Soluciones para tu Empresa</h2>
