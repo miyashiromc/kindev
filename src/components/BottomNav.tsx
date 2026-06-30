@@ -7,33 +7,42 @@ export default function BottomNav() {
 
   useEffect(() => {
     const sections = ['home', 'servicios', 'proyectos', 'precios', 'contacto'];
-    
-    // Configurar IntersectionObserver
+    const visibilityMap = new Map<string, number>();
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          // Si el elemento intercepta al menos el 50%, lo marcamos activo
-          const id = entry.target.id;
-          setActive(id === 'inicio' ? 'home' : id);
+        const id = entry.target.id === 'inicio' ? 'home' : entry.target.id;
+        visibilityMap.set(id, entry.intersectionRatio);
+      });
+
+      let maxRatio = 0;
+      let mostVisible = '';
+
+      visibilityMap.forEach((ratio, id) => {
+        if (ratio > maxRatio) {
+          maxRatio = ratio;
+          mostVisible = id;
         }
       });
+
+      if (maxRatio > 0 && mostVisible) {
+        setActive(prev => mostVisible !== prev ? mostVisible : prev);
+      }
     }, {
-      root: null, // Observa respecto al viewport completo
-      threshold: 0.5 // Se activa cuando al menos el 50% del elemento es visible
+      root: null,
+      threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
     });
 
-    // Observar cada sección
     sections.forEach(section => {
       const elementId = section === 'home' ? 'inicio' : section;
       const element = document.getElementById(elementId);
       if (element) {
         observer.observe(element);
+        visibilityMap.set(section, 0);
       }
     });
 
-    return () => {
-      observer.disconnect();
-    };
+    return () => observer.disconnect();
   }, []);
 
   const navItems = [
