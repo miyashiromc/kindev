@@ -33,7 +33,7 @@ export default function IntroAnimation({ onComplete }: IntroAnimationProps) {
     >
       <video
         ref={videoRef}
-        src="/intro_kindev.mp4"
+        src="/i2ntro_kindev.mp4"
         autoPlay
         muted
         playsInline
@@ -42,7 +42,7 @@ export default function IntroAnimation({ onComplete }: IntroAnimationProps) {
         // If it has a black background, this CSS alone won't work on a white container,
         // you would need to use a black container (bg-black) with mix-blend-screen.
         // For now, let's use mix-blend-multiply so it doesn't turn the screen white.
-        className="w-full h-full object-contain mix-blend-multiply max-w-4xl"
+        className="w-full h-full object-cover mix-blend-multiply"
       />
     </div>
   );
