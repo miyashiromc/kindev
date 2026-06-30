@@ -89,10 +89,8 @@ export default function IntroAnimation({ onComplete }: IntroAnimationProps) {
       />
       {/* Camouflage box to hide the Gemini watermark in the bottom right on desktop */}
       <div 
-        className="hidden md:block absolute bottom-0 right-0 w-48 h-24" 
-        style={{ 
-          background: `linear-gradient(to top left, ${bgColor} 40%, transparent 100%)` 
-        }} 
+        className="hidden md:block absolute bottom-0 right-0 w-[350px] h-[100px]" 
+        style={{ backgroundColor: bgColor }} 
       />
     </div>
   );
