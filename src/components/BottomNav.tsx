@@ -37,7 +37,7 @@ export default function BottomNav() {
   }, []);
 
   const navItems = [
-    { id: 'home', label: 'Inicio', icon: Sparkles, href: '#' },
+    { id: 'home', label: 'Inicio', icon: Sparkles, href: '#root' },
     { id: 'servicios', label: 'Servicios', icon: Layers, href: '#servicios' },
     { id: 'proyectos', label: 'Proyectos', icon: BriefcaseBusiness, href: '#proyectos' },
     { id: 'precios', label: 'Precios', icon: BadgeDollarSign, href: '#precios' },
