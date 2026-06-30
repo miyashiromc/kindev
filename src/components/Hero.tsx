@@ -89,18 +89,18 @@ export default function Hero() {
   return (
     <section id="inicio" className="snap-start min-h-[100dvh] w-full relative flex flex-col items-center justify-center pt-24 pb-28 md:pt-0 md:pb-0 px-2 md:px-8 overflow-hidden">
       {/* Video Background with Scrubbing Effect */}
-      <div className="fixed inset-0 -z-20">
+      <div className="absolute left-0 w-full top-1/2 -translate-y-1/2 h-[50vh] md:h-full md:top-0 md:translate-y-0 -z-20">
         <video
           ref={videoRef}
           src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260530_042513_df96a13b-6155-4f6e-8b93-c9dee66fba08.mp4"
-          className="w-full h-full object-contain md:object-cover object-center md:object-[70%_center]"
+          className="w-full h-full object-cover md:object-cover object-center md:object-[70%_center]"
           muted
           playsInline
           preload="auto"
         />
       </div>
       {/* Soft Overlay to match Kindev style and ensure text readability */}
-      <div className="fixed inset-0 bg-white/85 backdrop-blur-[4px] -z-10" />
+      <div className="absolute inset-0 bg-white/85 backdrop-blur-[4px] -z-10" />
 
       <div className="container mx-auto px-1 sm:px-6 relative z-10 max-w-5xl flex flex-col items-center text-center">
         
