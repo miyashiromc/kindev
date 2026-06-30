@@ -109,7 +109,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="text-[32px] sm:text-5xl md:text-6xl lg:text-[68px] font-display font-extrabold tracking-tight max-w-5xl leading-[1.1] mb-6 md:mb-8 text-slate-900"
+          className="text-[28px] sm:text-5xl md:text-6xl lg:text-[68px] font-display font-extrabold tracking-tight max-w-5xl leading-[1.1] mb-6 md:mb-8 text-slate-900"
         >
           Transformamos tus ideas en <MorphingTextReveal texts={["soluciones digitales.", "experiencias únicas.", "sistemas escalables.", "aplicaciones móviles."]} className="text-transparent bg-clip-text bg-gradient-to-r from-kindev-cyan via-kindev-emerald to-kindev-purple" />
         </motion.h1>
