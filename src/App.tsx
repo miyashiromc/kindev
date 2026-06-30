@@ -28,7 +28,7 @@ export default function App() {
     <div className="min-h-screen bg-kindev-bg text-kindev-dark font-sans selection:bg-kindev-cyan/30 overflow-x-hidden">
       {showIntro && <IntroAnimation onComplete={() => setShowIntro(false)} />}
       
-      <div className={`transition-opacity duration-1000 ${showIntro ? 'opacity-0 h-0 overflow-hidden' : 'opacity-100'}`}>
+      <div className={`transition-opacity duration-1000 opacity-100`}>
         <Navbar />
         <main className="pb-16 md:pb-0">
           <Hero />
