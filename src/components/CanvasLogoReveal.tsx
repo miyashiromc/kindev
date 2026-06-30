@@ -143,7 +143,8 @@ export default function CanvasLogoReveal() {
         if (!this.active) return;
         ctx.fillStyle = this.color;
         // Optimization: draw rectangle instead of arc for particles
-        ctx.fillRect(this.x, this.y, 2, 2);
+        // Use a smaller size for higher perceived resolution
+        ctx.fillRect(this.x, this.y, 1.2, 1.2);
       }
     }
 
@@ -151,11 +152,14 @@ export default function CanvasLogoReveal() {
     
     const initParticles = () => {
       const offCanvas = document.createElement('canvas');
-      offCanvas.width = logicalWidth;
-      offCanvas.height = logicalHeight;
+      const renderWidth = Math.floor(logicalWidth * dpr);
+      const renderHeight = Math.floor(logicalHeight * dpr);
+      offCanvas.width = renderWidth;
+      offCanvas.height = renderHeight;
       const offCtx = offCanvas.getContext('2d', { willReadFrequently: true });
       if (!offCtx) return;
 
+      offCtx.scale(dpr, dpr);
       offCtx.clearRect(0, 0, logicalWidth, logicalHeight);
       
       // Draw text - Thicker (800) and bigger (30px)
@@ -171,25 +175,32 @@ export default function CanvasLogoReveal() {
       
       offCtx.fillText('Kindev', 55, logicalHeight / 2 + 2);
 
-      const imageData = offCtx.getImageData(0, 0, logicalWidth, logicalHeight);
+      const imageData = offCtx.getImageData(0, 0, renderWidth, renderHeight);
       const data = imageData.data;
 
       particles = [];
-      // Step by 2 for performance, creating a dotted/particle effect
-      for (let y = 0; y < logicalHeight; y += 2) {
-        for (let x = 0; x < logicalWidth; x += 2) {
-          const index = (y * logicalWidth + x) * 4;
+      // Adjust step based on DPR to maintain high resolution without lagging
+      // step=2 on dpr=2 gives 1 particle per logical pixel (super high res)
+      const step = dpr > 1 ? 2 : 1;
+
+      for (let y = 0; y < renderHeight; y += step) {
+        for (let x = 0; x < renderWidth; x += step) {
+          const index = (y * renderWidth + x) * 4;
           const alpha = data[index + 3];
-          if (alpha > 100) {
+          // Lower alpha threshold includes anti-aliasing edges for smoother text
+          if (alpha > 30) {
             const r = data[index];
             const g = data[index + 1];
             const b = data[index + 2];
             const color = `rgba(${r}, ${g}, ${b}, ${alpha/255})`;
             
+            // Map device coordinates back to logical coordinates for physics
+            const logicalX = x / dpr;
+            const logicalY = y / dpr;
+            
             // Particles delay is based on their X position so they reveal left-to-right
-            // as the logo sweeps past them.
-            const delay = (x - 55) * 8 + Math.random() * 100;
-            particles.push(new Particle(x, y, color, delay));
+            const delay = (logicalX - 55) * 8 + Math.random() * 100;
+            particles.push(new Particle(logicalX, logicalY, color, delay));
           }
         }
       }
