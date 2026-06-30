@@ -1,4 +1,5 @@
 import { motion } from 'motion/react';
+import { ArrowRight } from 'lucide-react';
 import { MorphingTextReveal } from './MorphingTextReveal';
 import { useState, useEffect } from 'react';
 
@@ -36,14 +37,16 @@ export default function Hero() {
       {/* Video Background */}
       <div className="absolute left-0 w-full top-1/2 -translate-y-1/2 h-[90vh] md:h-full md:top-0 md:translate-y-0 -z-20">
         <video
-          src="/i2ntro_kindev.mp4"
-          className="w-full h-full object-cover md:object-cover object-center mix-blend-multiply"
-          muted
-          playsInline
+          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260530_042513_df96a13b-6155-4f6e-8b93-c9dee66fba08.mp4"
+          className="w-full h-full object-cover md:object-cover object-center md:object-[70%_center]"
           autoPlay
           loop
+          muted
+          playsInline
         />
       </div>
+      {/* Soft Overlay disabled for testing visibility of the video */}
+      {/* <div className="absolute inset-0 bg-white/85 backdrop-blur-[4px] -z-10" /> */}
 
       <div className="container mx-auto px-1 sm:px-6 relative z-10 max-w-5xl flex flex-col items-center text-center">
         
