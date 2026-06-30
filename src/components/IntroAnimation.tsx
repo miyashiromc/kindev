@@ -27,7 +27,7 @@ export default function IntroAnimation({ onComplete }: IntroAnimationProps) {
   return (
     <div
       onClick={handleComplete}
-      className={`fixed inset-0 z-50 flex items-center justify-center bg-white/80 backdrop-blur-md transition-opacity duration-500 cursor-pointer ${
+      className={`fixed inset-0 z-50 flex items-center justify-center bg-kindev-bg transition-opacity duration-500 cursor-pointer ${
         isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'
       }`}
     >
@@ -38,10 +38,11 @@ export default function IntroAnimation({ onComplete }: IntroAnimationProps) {
         muted
         playsInline
         onEnded={handleComplete}
-        // mix-blend-multiply makes pure white transparent.
-        // We use brightness(1.05) contrast(1.1) to force near-whites (due to mp4 compression) into pure white so they disappear completely.
-        className="w-full h-full object-cover mix-blend-multiply"
-        style={{ filter: 'brightness(1.05) contrast(1.1)' }}
+        // Use mix-blend-multiply if the video has a white background.
+        // If it has a black background, this CSS alone won't work on a white container,
+        // you would need to use a black container (bg-black) with mix-blend-screen.
+        // For now, let's use mix-blend-multiply so it doesn't turn the screen white.
+        className="w-full h-[50vh] md:h-full object-cover mix-blend-multiply"
       />
     </div>
   );
