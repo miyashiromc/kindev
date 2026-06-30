@@ -81,23 +81,34 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
       color: string;
       delay: number;
       active: boolean;
+      randomSeed: number;
 
       constructor(x: number, y: number, color: string, delay: number) {
         this.originX = x;
         this.originY = y;
-        // Start from behind the logo center
-        this.x = startLogoX + logoSize / 2 + (Math.random() - 0.5) * 40;
-        this.y = centerY + (Math.random() - 0.5) * 40;
         
-        this.vx = (Math.random() - 0.5) * 25;
-        this.vy = (Math.random() - 0.5) * 25;
+        // Start exactly from behind the centered logo
+        this.x = startLogoX + logoSize / 2;
+        this.y = centerY;
+        
+        // Massive initial explosive velocity in all directions
+        const angle = Math.random() * Math.PI * 2;
+        const speed = Math.random() * 50 + 10;
+        this.vx = Math.cos(angle) * speed;
+        this.vy = Math.sin(angle) * speed;
+        
         this.color = color;
         this.delay = delay;
         this.active = false;
+        this.randomSeed = Math.random() * 100;
       }
 
-      update(time: number, currentLogoRight: number) {
-        if (time < this.delay) return;
+      update(time: number, elapsed: number, currentLogoRight: number) {
+        // Wait until the logo starts sliding (1000ms) plus individual delay
+        if (elapsed < 1000) return;
+        const slideTime = elapsed - 1000;
+        if (slideTime < this.delay) return;
+        
         this.active = true;
 
         const dx = this.originX - this.x;
@@ -113,7 +124,7 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
         const repelRadius = isMobile ? 40 : 60;
         if (distToLogoEdge < repelRadius) {
           const angle = Math.atan2(this.y - centerY, this.x - currentLogoRight);
-          const force = (repelRadius - distToLogoEdge) * 0.5;
+          const force = (repelRadius - distToLogoEdge) * 0.6;
           forceX += Math.cos(angle) * force;
           forceY += Math.sin(angle) * force;
         }
@@ -121,7 +132,7 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
         // 2. Mouse Repulsion
         if (mouseX !== -100) {
           const distToMouse = Math.sqrt((this.x - mouseX) ** 2 + (this.y - mouseY) ** 2);
-          const mouseRadius = isMobile ? 20 : 30;
+          const mouseRadius = isMobile ? 30 : 50;
           if (distToMouse < mouseRadius) {
             const angle = Math.atan2(this.y - mouseY, this.x - mouseX);
             const force = (mouseRadius - distToMouse) * 1.5;
@@ -143,12 +154,21 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
           }
         });
 
-        this.vx += dx * 0.05 + forceX;
-        this.vy += dy * 0.05 + forceY;
-        this.vx *= 0.80;
-        this.vy *= 0.80;
+        // Stronger spring force for a snappy, satisfying assembly
+        this.vx += dx * 0.08 + forceX;
+        this.vy += dy * 0.08 + forceY;
+        
+        // Slightly less friction for "bounciness"
+        this.vx *= 0.85;
+        this.vy *= 0.85;
+        
         this.x += this.vx;
         this.y += this.vy;
+
+        // Subtle floating/breathing effect once mostly settled
+        if (slideTime > 1500 && Math.abs(dx) < 2 && Math.abs(dy) < 2) {
+          this.y += Math.sin(elapsed * 0.003 + this.randomSeed) * 0.3;
+        }
       }
 
       draw(ctx: CanvasRenderingContext2D) {
@@ -190,7 +210,6 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
       const data = imageData.data;
 
       particles = [];
-      // Performance-aware step: less dense on mobile for performance
       const step = isMobile ? (dpr > 1 ? 3 : 2) : (dpr > 1 ? 2 : 1);
 
       for (let y = 0; y < renderHeight; y += step) {
@@ -206,8 +225,8 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
             const logicalX = x / dpr;
             const logicalY = y / dpr;
             
-            // Delay based on distance from text start
-            const delay = (logicalX - textX) * 6 + Math.random() * 150;
+            // Shorter delay span for a more explosive simultaneous reveal
+            const delay = (logicalX - textX) * 4 + Math.random() * 100;
             particles.push(new Particle(logicalX, logicalY, color, delay));
           }
         }
@@ -227,30 +246,59 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
       waves.forEach(w => w.radius += 10);
       waves = waves.filter(w => w.radius < logicalWidth);
 
-      // Logo slides from center to final left position over 1200ms
+      // Animation Phases
+      let logoAlpha = 0;
+      let logoScale = 0.5;
       let currentLogoX = startLogoX;
-      if (elapsed > 0) {
-        const progress = Math.min(elapsed / 1200, 1);
-        const ease = 1 - Math.pow(1 - progress, 3);
+
+      // Phase 1: Logo Entrance (0 - 800ms)
+      if (elapsed < 800) {
+        const p = elapsed / 800;
+        // EaseOutBack for a slight overshoot popping effect
+        const ease = 1 - Math.pow(1 - p, 3); 
+        logoAlpha = ease;
+        logoScale = 0.5 + 0.5 * ease;
+      } 
+      // Phase 2: Pause & Anticipation (800 - 1000ms)
+      else if (elapsed >= 800 && elapsed < 1000) {
+        logoAlpha = 1;
+        logoScale = 1;
+      }
+      // Phase 3: Slide and Explode (1000ms+)
+      else if (elapsed >= 1000) {
+        logoAlpha = 1;
+        logoScale = 1;
+        const slideElapsed = elapsed - 1000;
+        const progress = Math.min(slideElapsed / 1200, 1);
+        // Exponential ease out for a snappy slide
+        const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
         currentLogoX = startLogoX - (startLogoX - finalLogoX) * ease;
       }
 
-      // Update and draw particles
-      if (elapsed > 0) {
-        const logoRight = currentLogoX + logoSize;
-        particles.forEach(p => {
-          p.update(elapsed, logoRight);
-          p.draw(ctx);
-        });
+      // Draw Particles
+      const logoRight = currentLogoX + (logoSize * logoScale) / 2; // Approximate right edge
+      particles.forEach(p => {
+        p.update(currentTime, elapsed, logoRight);
+        p.draw(ctx);
+      });
+
+      // Draw Logo with Alpha and Scale
+      if (img.complete && img.naturalWidth !== 0 && logoAlpha > 0) {
+        ctx.save();
+        ctx.globalAlpha = logoAlpha;
+        const currentSize = logoSize * logoScale;
+        ctx.drawImage(
+          img, 
+          currentLogoX - currentSize / 2 + logoSize / 2, // Keep centered on currentLogoX during scale
+          centerY - currentSize / 2, 
+          currentSize, 
+          currentSize
+        );
+        ctx.restore();
       }
 
-      // Draw Logo (big, centered vertically)
-      if (img.complete && img.naturalWidth !== 0) {
-        ctx.drawImage(img, currentLogoX, centerY - logoSize / 2, logoSize, logoSize);
-      }
-
-      // Trigger completion after 3000ms (a bit longer for the bigger animation)
-      if (elapsed > 3000 && !isCompleteTriggered) {
+      // Phase 4: Trigger completion after 3500ms
+      if (elapsed > 3500 && !isCompleteTriggered) {
         isCompleteTriggered = true;
         onComplete();
       }
