@@ -87,6 +87,13 @@ export default function IntroAnimation({ onComplete }: IntroAnimationProps) {
           WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)'
         }}
       />
+      {/* Camouflage box to hide the Gemini watermark in the bottom right on desktop */}
+      <div 
+        className="hidden md:block absolute bottom-0 right-0 w-48 h-24" 
+        style={{ 
+          background: `linear-gradient(to top left, ${bgColor} 40%, transparent 100%)` 
+        }} 
+      />
     </div>
   );
 }
