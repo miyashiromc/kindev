@@ -270,9 +270,13 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
       else if (elapsed >= 1000) {
         logoAlpha = 1;
         const slideElapsed = elapsed - 1000;
-        const progress = Math.min(slideElapsed / 800, 1);
-        // Exponential ease out for a snappy slide
-        const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+        const slideDuration = 1400; // Much longer, softer duration
+        const progress = Math.min(slideElapsed / slideDuration, 1);
+        
+        // easeInOutCubic for a very soft start, smooth acceleration, and soft deceleration
+        const ease = progress < 0.5 
+          ? 4 * progress * progress * progress 
+          : 1 - Math.pow(-2 * progress + 2, 3) / 2;
         
         // Shrink down to normal size as it slides
         logoScale = initialScale - (initialScale - 1.0) * ease;
@@ -301,8 +305,8 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
         ctx.restore();
       }
 
-      // Phase 4: Trigger completion after 3200ms
-      if (elapsed > 3200 && !isCompleteTriggered) {
+      // Phase 4: Trigger completion after 3800ms
+      if (elapsed > 3800 && !isCompleteTriggered) {
         isCompleteTriggered = true;
         onComplete();
       }
