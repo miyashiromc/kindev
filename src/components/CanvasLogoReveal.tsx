@@ -10,9 +10,9 @@ export default function CanvasLogoReveal() {
     if (!ctx) return;
 
     const dpr = window.devicePixelRatio || 1;
-    // We want a fixed logical size that fits the logo and text
-    const logicalWidth = 180;
-    const logicalHeight = 40;
+    // Increased logical size to accommodate larger logo and text
+    const logicalWidth = 240;
+    const logicalHeight = 60;
     
     canvas.width = logicalWidth * dpr;
     canvas.height = logicalHeight * dpr;
@@ -37,13 +37,13 @@ export default function CanvasLogoReveal() {
       constructor(x: number, y: number, color: string, delay: number) {
         this.originX = x;
         this.originY = y;
-        // Start position is behind the logo initially (x around 45)
-        this.x = 45 + (Math.random() - 0.5) * 10;
-        this.y = logicalHeight / 2 + (Math.random() - 0.5) * 10;
+        // Start position is behind the logo initially (x around 55)
+        this.x = 55 + (Math.random() - 0.5) * 15;
+        this.y = logicalHeight / 2 + (Math.random() - 0.5) * 15;
         
         // Initial explosive velocity
-        this.vx = (Math.random() - 0.5) * 8;
-        this.vy = (Math.random() - 0.5) * 8;
+        this.vx = (Math.random() - 0.5) * 10;
+        this.vy = (Math.random() - 0.5) * 10;
         this.color = color;
         this.delay = delay;
         this.active = false;
@@ -60,20 +60,20 @@ export default function CanvasLogoReveal() {
         const distToLogo = Math.sqrt((this.x - logoX) ** 2 + (this.y - logicalHeight/2) ** 2);
         let forceX = 0;
         let forceY = 0;
-        if (distToLogo < 20) {
+        if (distToLogo < 25) {
           const angle = Math.atan2(this.y - logicalHeight/2, this.x - logoX);
-          const force = (20 - distToLogo) * 0.3;
+          const force = (25 - distToLogo) * 0.4;
           forceX = Math.cos(angle) * force;
           forceY = Math.sin(angle) * force;
         }
 
         // Spring force towards origin
-        this.vx += dx * 0.04 + forceX;
-        this.vy += dy * 0.04 + forceY;
+        this.vx += dx * 0.05 + forceX;
+        this.vy += dy * 0.05 + forceY;
         
         // Friction
-        this.vx *= 0.82;
-        this.vy *= 0.82;
+        this.vx *= 0.80;
+        this.vy *= 0.80;
         
         this.x += this.vx;
         this.y += this.vy;
@@ -83,7 +83,7 @@ export default function CanvasLogoReveal() {
         if (!this.active) return;
         ctx.fillStyle = this.color;
         // Optimization: draw rectangle instead of arc for particles
-        ctx.fillRect(this.x, this.y, 1.5, 1.5);
+        ctx.fillRect(this.x, this.y, 2, 2);
       }
     }
 
@@ -98,18 +98,18 @@ export default function CanvasLogoReveal() {
 
       offCtx.clearRect(0, 0, logicalWidth, logicalHeight);
       
-      // Draw text
-      offCtx.font = 'bold 22px "Plus Jakarta Sans", sans-serif';
+      // Draw text - Thicker (800) and bigger (30px)
+      offCtx.font = '800 30px "Plus Jakarta Sans", sans-serif';
       offCtx.textBaseline = 'middle';
       
       // Gradient for text to match Kindev style
-      const gradient = offCtx.createLinearGradient(40, 0, 140, 0);
+      const gradient = offCtx.createLinearGradient(55, 0, 180, 0);
       gradient.addColorStop(0, '#06b6d4'); // cyan
       gradient.addColorStop(0.5, '#10b981'); // emerald
       gradient.addColorStop(1, '#8b5cf6'); // purple
       offCtx.fillStyle = gradient;
       
-      offCtx.fillText('Kindev', 40, logicalHeight / 2 + 2);
+      offCtx.fillText('Kindev', 55, logicalHeight / 2 + 2);
 
       const imageData = offCtx.getImageData(0, 0, logicalWidth, logicalHeight);
       const data = imageData.data;
@@ -128,7 +128,7 @@ export default function CanvasLogoReveal() {
             
             // Particles delay is based on their X position so they reveal left-to-right
             // as the logo sweeps past them.
-            const delay = (x - 40) * 8 + Math.random() * 100;
+            const delay = (x - 55) * 8 + Math.random() * 100;
             particles.push(new Particle(x, y, color, delay));
           }
         }
@@ -145,26 +145,26 @@ export default function CanvasLogoReveal() {
       
       ctx.clearRect(0, 0, logicalWidth, logicalHeight);
 
-      // Logo animation: start at x=45, move to x=0 over 800ms
-      let logoX = 45;
+      // Logo animation: start at x=55, move to x=0 over 800ms
+      let logoX = 55;
       if (elapsed > 0) {
         const progress = Math.min(elapsed / 800, 1);
         const ease = 1 - Math.pow(1 - progress, 3); // Cubic ease out
-        logoX = 45 - (45 * ease);
+        logoX = 55 - (55 * ease);
       }
 
       // Update and draw particles
       if (elapsed > 0) {
-        // We pass logoX + 16 (approx center of logo) so particles react to it
+        // We pass logoX + 22 (approx center of the larger logo) so particles react to it
         particles.forEach(p => {
-          p.update(elapsed, logoX + 16);
+          p.update(elapsed, logoX + 22);
           p.draw(ctx);
         });
       }
 
       // Draw Logo
       if (img.complete && img.naturalWidth !== 0) {
-        const size = 32;
+        const size = 44; // Bigger logo
         // Draw the logo centered vertically
         ctx.drawImage(img, logoX, logicalHeight / 2 - size / 2, size, size);
       }
