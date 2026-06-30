@@ -30,12 +30,6 @@ export default function IntroAnimation({ onComplete }: IntroAnimationProps) {
         isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'
       }`}
     >
-      {/* 
-        To remove the background, we can use mix-blend-mode. 
-        If the video has a black background, use 'mix-blend-screen'.
-        If the video has a white background, use 'mix-blend-multiply'.
-        Adjust accordingly. We use a transparent container so the background color of the app shines through.
-      */}
       <video
         ref={videoRef}
         src="/intro_kindev.mp4"
@@ -43,7 +37,11 @@ export default function IntroAnimation({ onComplete }: IntroAnimationProps) {
         muted
         playsInline
         onEnded={handleComplete}
-        className="w-full h-full object-contain mix-blend-screen max-w-4xl"
+        // Use mix-blend-multiply if the video has a white background.
+        // If it has a black background, this CSS alone won't work on a white container,
+        // you would need to use a black container (bg-black) with mix-blend-screen.
+        // For now, let's use mix-blend-multiply so it doesn't turn the screen white.
+        className="w-full h-full object-contain mix-blend-multiply max-w-4xl"
       />
     </div>
   );
