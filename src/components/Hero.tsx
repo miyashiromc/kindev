@@ -1,7 +1,6 @@
 import { motion } from 'motion/react';
-import { ArrowRight } from 'lucide-react';
 import { MorphingTextReveal } from './MorphingTextReveal';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 
 // Custom Typewriter Hook
 function useTypewriter(text: string, speed = 38, startDelay = 600) {
@@ -30,77 +29,21 @@ function useTypewriter(text: string, speed = 38, startDelay = 600) {
 }
 
 export default function Hero() {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const targetTimeRef = useRef(0);
-  const isSeekingRef = useRef(false);
-  const prevXRef = useRef(0);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!video.duration || isNaN(video.duration)) return;
-      const currentX = e.clientX;
-      const delta = currentX - prevXRef.current;
-      prevXRef.current = currentX;
-
-      const sensitivity = 0.8;
-      const deltaSeconds = (delta / window.innerWidth) * sensitivity * video.duration;
-
-      targetTimeRef.current = Math.max(0, Math.min(video.duration, targetTimeRef.current + deltaSeconds));
-
-      if (!isSeekingRef.current) {
-        performSeek();
-      }
-    };
-
-    const performSeek = () => {
-      if (!video) return;
-      if (Math.abs(video.currentTime - targetTimeRef.current) > 0.05) {
-        isSeekingRef.current = true;
-        video.currentTime = targetTimeRef.current;
-      }
-    };
-
-    const handleSeeked = () => {
-      isSeekingRef.current = false;
-      if (video && Math.abs(video.currentTime - targetTimeRef.current) > 0.05) {
-        performSeek();
-      }
-    };
-
-    const handleInitialMouse = (e: MouseEvent) => {
-      prevXRef.current = e.clientX;
-      window.addEventListener('mousemove', handleMouseMove);
-    };
-    
-    window.addEventListener('mousemove', handleInitialMouse, { once: true });
-    video.addEventListener('seeked', handleSeeked);
-
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      video.removeEventListener('seeked', handleSeeked);
-    };
-  }, []);
-
   const { displayed, done } = useTypewriter("Nos alegra que estés aquí. El buen gusto siempre nos encuentra. Entonces, ¿qué vamos a construir hoy?");
 
   return (
     <section id="inicio" className="snap-start min-h-[100dvh] w-full relative flex flex-col items-center justify-center pt-24 pb-28 md:pt-0 md:pb-0 px-2 md:px-8 overflow-hidden">
-      {/* Video Background with Scrubbing Effect */}
+      {/* Video Background */}
       <div className="absolute left-0 w-full top-1/2 -translate-y-1/2 h-[90vh] md:h-full md:top-0 md:translate-y-0 -z-20">
         <video
-          ref={videoRef}
-          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260530_042513_df96a13b-6155-4f6e-8b93-c9dee66fba08.mp4"
-          className="w-full h-full object-cover md:object-cover object-center md:object-[70%_center]"
+          src="/i2ntro_kindev.mp4"
+          className="w-full h-full object-cover md:object-cover object-center mix-blend-multiply"
           muted
           playsInline
-          preload="auto"
+          autoPlay
+          loop
         />
       </div>
-      {/* Soft Overlay disabled for testing visibility of the video */}
-      {/* <div className="absolute inset-0 bg-white/85 backdrop-blur-[4px] -z-10" /> */}
 
       <div className="container mx-auto px-1 sm:px-6 relative z-10 max-w-5xl flex flex-col items-center text-center">
         
