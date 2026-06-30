@@ -82,6 +82,10 @@ export default function IntroAnimation({ onComplete }: IntroAnimationProps) {
         playsInline
         onEnded={handleComplete}
         className="w-full h-[50vh] md:h-full object-cover"
+        style={{
+          maskImage: 'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)',
+          WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)'
+        }}
       />
     </div>
   );
