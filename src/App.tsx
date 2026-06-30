@@ -33,7 +33,7 @@ export default function App() {
         It takes the full screen height and snaps its children. 
       */}
       <div className={`transition-opacity duration-1000 h-full w-full ${showIntro ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-        <Navbar />
+        {!showIntro && <Navbar />}
         
         {/* This is the main scroll container. It takes the full screen height and snaps its children. */}
         <main className="w-full h-full overflow-y-auto overflow-x-hidden snap-y snap-mandatory scroll-smooth">
