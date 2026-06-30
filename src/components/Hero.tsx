@@ -89,7 +89,7 @@ export default function Hero() {
   return (
     <section id="inicio" className="snap-start min-h-[100dvh] w-full relative flex flex-col items-center justify-center pt-24 pb-28 md:pt-0 md:pb-0 px-2 md:px-8 overflow-hidden">
       {/* Video Background with Scrubbing Effect */}
-      <div className="absolute left-0 w-full top-1/2 -translate-y-1/2 h-[50vh] md:h-full md:top-0 md:translate-y-0 -z-20">
+      <div className="absolute left-0 w-full top-1/2 -translate-y-1/2 h-[90vh] md:h-full md:top-0 md:translate-y-0 -z-20">
         <video
           ref={videoRef}
           src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260530_042513_df96a13b-6155-4f6e-8b93-c9dee66fba08.mp4"
