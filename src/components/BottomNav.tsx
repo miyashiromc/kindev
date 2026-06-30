@@ -54,8 +54,8 @@ export default function BottomNav() {
   ];
 
   return (
-    <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 w-full bg-white/90 backdrop-blur-xl border-t border-slate-200/50 pb-safe shadow-[0_-4px_20px_rgb(0,0,0,0.05)]">
-      <div className="flex justify-around items-center px-2 py-2">
+    <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 w-full glass border-t border-white/10 pb-safe shadow-[0_-4px_20px_rgb(0,0,0,0.2)]">
+      <div className="flex justify-around items-center px-2 py-1.5">
         {navItems.map(({ id, label, icon: Icon, href }) => {
           const isActive = active === id;
           return (
@@ -63,14 +63,14 @@ export default function BottomNav() {
               key={id}
               href={href}
               onClick={() => setActive(id)}
-              className={`relative flex flex-col items-center justify-center w-[72px] h-[52px] gap-1 rounded-2xl transition-colors z-10 ${
-                isActive ? 'text-kindev-cyan' : 'text-slate-500 hover:text-slate-900'
+              className={`relative flex flex-col items-center justify-center w-[68px] h-[46px] gap-0.5 rounded-xl transition-colors z-10 ${
+                isActive ? 'text-kindev-cyan' : 'text-slate-400 hover:text-white'
               }`}
             >
               {isActive && (
                 <motion.div
                   layoutId="bottomNavBubble"
-                  className="absolute inset-0 bg-slate-100/90 rounded-2xl -z-10"
+                  className="absolute inset-0 bg-white/[0.08] border border-white/[0.1] rounded-2xl -z-10"
                   transition={{ type: "spring", bounce: 0.25, duration: 0.5 }}
                 />
               )}
@@ -79,8 +79,8 @@ export default function BottomNav() {
                 animate={{ y: isActive ? -2 : 0 }}
                 className="relative flex flex-col items-center justify-center w-full h-full"
               >
-                <Icon size={isActive ? 22 : 20} strokeWidth={isActive ? 2.5 : 2} />
-                <span className={`text-[9px] font-bold tracking-wide mt-1 transition-all duration-300 ${isActive ? 'opacity-100 scale-100' : 'opacity-80 scale-95'}`}>
+                <Icon size={isActive ? 20 : 18} strokeWidth={isActive ? 2.5 : 2} />
+                <span className={`text-[9px] font-bold tracking-wide mt-0.5 transition-all duration-300 ${isActive ? 'opacity-100 scale-100' : 'opacity-80 scale-95'}`}>
                   {label}
                 </span>
               </motion.div>

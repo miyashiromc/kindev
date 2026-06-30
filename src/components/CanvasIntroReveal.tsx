@@ -31,7 +31,8 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
     const isMobile = logicalWidth < 768;
     const logoSize = isMobile ? 120 : 320; 
     const fontSize = isMobile ? 48 : 150; 
-    const textOffsetX = logoSize + (isMobile ? 10 : 30); 
+    // Reduced offset to make the text closer to the logo at the end
+    const textOffsetX = logoSize + (isMobile ? 15 : 40); 
     const centerX = logicalWidth / 2;
     const centerY = logicalHeight / 2;
     // The logo starts centered, then slides left to make room for text
@@ -105,11 +106,16 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
         this.randomSeed = Math.random() * 100;
       }
 
-      update(time: number, elapsed: number, currentLogoRight: number) {
-        // Wait until the logo starts sliding (1000ms) plus individual delay
-        if (elapsed < 1000) return;
-        const slideTime = elapsed - 1000;
-        if (slideTime < this.delay) return;
+      update(time: number, elapsed: number, currentLogoCenter: number, currentLogoRight: number) {
+        // Wait until the logo starts sliding (500ms) plus individual delay
+        if (elapsed < 500) return;
+        const slideTime = elapsed - 500;
+        if (slideTime < this.delay) {
+          // Keep tracking the logo while waiting to spawn so particles always emerge from the hummingbird
+          this.x = currentLogoCenter;
+          this.y = centerY;
+          return;
+        }
         
         this.active = true;
 
@@ -123,10 +129,10 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
         const distToLogoEdge = Math.sqrt(
           (this.x - currentLogoRight) ** 2 + (this.y - centerY) ** 2
         );
-        const repelRadius = isMobile ? 40 : 60;
+        const repelRadius = isMobile ? 60 : 120;
         if (distToLogoEdge < repelRadius) {
           const angle = Math.atan2(this.y - centerY, this.x - currentLogoRight);
-          const force = (repelRadius - distToLogoEdge) * (isMobile ? 0.3 : 0.6);
+          const force = (repelRadius - distToLogoEdge) * (isMobile ? 0.5 : 1.0);
           forceX += Math.cos(angle) * force;
           forceY += Math.sin(angle) * force;
         }
@@ -224,9 +230,9 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
             const logicalX = x / dpr;
             const logicalY = y / dpr;
             
-            // Longer delay on mobile for a smoother, softer wave-like reveal instead of a sudden explosion
-            const delayMultiplier = isMobile ? 1.8 : 0.4;
-            const delay = (logicalX - textX) * delayMultiplier + Math.random() * (isMobile ? 30 : 10);
+            // Balanced delay for 2.5 seconds
+            const delayMultiplier = isMobile ? 2.8 : 1.6;
+            const delay = (logicalX - textX) * delayMultiplier + Math.random() * (isMobile ? 50 : 20);
             particles.push(new Particle(logicalX, logicalY, color, delay));
           }
         }
@@ -253,44 +259,35 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
       
       const initialScale = isMobile ? 2.5 : 1.5; // Massive initial size
 
-      // Phase 1: Logo Entrance (0 - 800ms)
-      if (elapsed < 800) {
-        const p = elapsed / 800;
+      // Phase 1: Logo Entrance (0 - 400ms)
+      if (elapsed < 400) {
+        const p = elapsed / 400;
         // EaseOutBack for a slight overshoot popping effect
         const ease = 1 - Math.pow(1 - p, 3); 
         logoAlpha = ease;
         logoScale = 0.5 + (initialScale - 0.5) * ease;
       } 
-      // Phase 2: Pause & Anticipation (800 - 1000ms)
-      else if (elapsed >= 800 && elapsed < 1000) {
+      // Phase 2: Pause & Anticipation (400 - 500ms)
+      else if (elapsed >= 400 && elapsed < 500) {
         logoAlpha = 1;
         logoScale = initialScale;
       }
-      // Phase 3: Slide and Explode (1000ms+)
-      else if (elapsed >= 1000) {
+      // Phase 3: Slide and Explode (500ms+)
+      else if (elapsed >= 500) {
         logoAlpha = 1;
-        const slideElapsed = elapsed - 1000;
-        const slideDuration = 1400; // Much longer, softer duration
+        const slideElapsed = elapsed - 500;
+        const slideDuration = 1500; // Accelerated slide to fit 2.5 seconds
         const progress = Math.min(slideElapsed / slideDuration, 1);
         
-        // easeInOutCubic for a very soft start, smooth acceleration, and soft deceleration
-        const ease = progress < 0.5 
-          ? 4 * progress * progress * progress 
-          : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+        // easeOutQuart: moves fast initially to get out of the text's way, then glides smoothly
+        const ease = 1 - Math.pow(1 - progress, 4);
         
         // Shrink down to normal size as it slides
         logoScale = initialScale - (initialScale - 1.0) * ease;
         currentLogoX = startLogoX - (startLogoX - finalLogoX) * ease;
       }
 
-      // Draw Particles
-      const logoRight = currentLogoX + (logoSize * logoScale) / 2; // Approximate right edge
-      particles.forEach(p => {
-        p.update(currentTime, elapsed, logoRight);
-        p.draw(ctx);
-      });
-
-      // Draw Logo with Alpha and Scale
+      // Draw Logo with Alpha and Scale FIRST (so particles draw on top)
       if (img.complete && img.naturalWidth !== 0 && logoAlpha > 0) {
         ctx.save();
         ctx.globalAlpha = logoAlpha;
@@ -305,8 +302,16 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
         ctx.restore();
       }
 
-      // Phase 4: Trigger completion after 3800ms
-      if (elapsed > 3800 && !isCompleteTriggered) {
+      // Draw Particles SECOND (so they flow out OVER the logo, not under it)
+      const logoCenter = currentLogoX + logoSize / 2;
+      const logoRight = currentLogoX + (logoSize * logoScale) / 2; // Approximate right edge
+      particles.forEach(p => {
+        p.update(currentTime, elapsed, logoCenter, logoRight);
+        p.draw(ctx);
+      });
+
+      // Phase 4: Trigger completion after 2500ms (2.5 seconds)
+      if (elapsed > 2500 && !isCompleteTriggered) {
         isCompleteTriggered = true;
         onComplete();
       }

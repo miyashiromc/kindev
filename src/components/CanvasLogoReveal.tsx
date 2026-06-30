@@ -34,11 +34,13 @@ export default function CanvasLogoReveal() {
       const rect = canvas.getBoundingClientRect();
       mouseX = e.clientX - rect.left;
       mouseY = e.clientY - rect.top;
+      startLoop();
     };
 
     const handlePointerLeave = () => {
       mouseX = -100;
       mouseY = -100;
+      startLoop();
     };
 
     const handleInteraction = (e: PointerEvent) => {
@@ -52,7 +54,7 @@ export default function CanvasLogoReveal() {
         radius: 0
       });
 
-      document.getElementById('inicio')?.scrollIntoView({ behavior: 'smooth' });
+      startLoop();
     };
 
     // Use modern pointer events to handle both mouse and touch correctly
@@ -61,6 +63,17 @@ export default function CanvasLogoReveal() {
     canvas.addEventListener('pointerdown', handleInteraction);
     canvas.addEventListener('pointerup', handlePointerLeave);
     canvas.addEventListener('pointercancel', handlePointerLeave);
+
+    let isRunning = false;
+    let lastActiveTime = Date.now();
+
+    const startLoop = () => {
+      lastActiveTime = Date.now();
+      if (!isRunning) {
+        isRunning = true;
+        render();
+      }
+    };
     
     class Particle {
       x: number;
@@ -76,20 +89,25 @@ export default function CanvasLogoReveal() {
       constructor(x: number, y: number, color: string, delay: number) {
         this.originX = x;
         this.originY = y;
-        // Start position is behind the logo initially (x around 55)
-        this.x = 55 + (Math.random() - 0.5) * 15;
-        this.y = logicalHeight / 2 + (Math.random() - 0.5) * 15;
+        // Will track the logo while waiting
+        this.x = 55;
+        this.y = logicalHeight / 2;
         
         // Initial explosive velocity
-        this.vx = (Math.random() - 0.5) * 10;
-        this.vy = (Math.random() - 0.5) * 10;
+        this.vx = (Math.random() - 0.5) * 8;
+        this.vy = (Math.random() - 0.5) * 8;
         this.color = color;
         this.delay = delay;
         this.active = false;
       }
 
       update(time: number, logoX: number) {
-        if (time < this.delay) return;
+        if (time < this.delay) {
+          // Track the logo while waiting to spawn so particles always emerge from the hummingbird
+          this.x = logoX;
+          this.y = logicalHeight / 2;
+          return;
+        }
         this.active = true;
 
         const dx = this.originX - this.x;
@@ -125,19 +143,19 @@ export default function CanvasLogoReveal() {
           if (distFromWaveFront < 20) { // wider wave band
             const angle = Math.atan2(this.y - wave.y, this.x - wave.x);
             // Push outwards and upwards for a huge splash effect
-            const force = (20 - distFromWaveFront) * 3.0; // much stronger force
+            const force = (20 - distFromWaveFront) * 1.5; // Smooth splash force
             forceX += Math.cos(angle) * force;
-            forceY += Math.sin(angle) * force - force * 0.5;
+            forceY += Math.sin(angle) * force - force * 0.2;
           }
         });
 
-        // Spring force towards origin
-        this.vx += dx * 0.05 + forceX;
-        this.vy += dy * 0.05 + forceY;
+        // Spring force towards origin (smooth and fast)
+        this.vx += dx * 0.12 + forceX;
+        this.vy += dy * 0.12 + forceY;
         
-        // Friction
-        this.vx *= 0.80;
-        this.vy *= 0.80;
+        // Friction (optimized to prevent infinite jittering)
+        this.vx *= 0.70;
+        this.vy *= 0.70;
         
         this.x += this.vx;
         this.y += this.vy;
@@ -248,13 +266,20 @@ export default function CanvasLogoReveal() {
         ctx.drawImage(img, logoX, logicalHeight / 2 - size / 2, size, size);
       }
 
+      // Check if we can pause the animation loop
+      // Conditions for idle: >2.5s since start, no waves, no mouse, >3.5s since last interaction to allow settling
+      if (elapsed > 2500 && waves.length === 0 && mouseX === -100 && (currentTime - lastActiveTime > 3500)) {
+        isRunning = false;
+        return; // Exit loop
+      }
+
       animationFrameId = requestAnimationFrame(render);
     };
 
     // Ensure fonts are loaded before extracting text pixels
     const start = () => {
       initParticles();
-      render();
+      startLoop();
     };
 
     img.onload = () => {

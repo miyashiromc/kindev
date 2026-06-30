@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import ServicesBento from './components/ServicesBento';
@@ -8,11 +8,13 @@ import Workflow from './components/Workflow';
 import ContactTerminal from './components/ContactTerminal';
 import BottomNav from './components/BottomNav';
 import IntroAnimation from './components/IntroAnimation';
+import AuroraBackground from './components/AuroraBackground';
 
 export default function App() {
   const [showIntro, setShowIntro] = useState(true);
+  const mainRef = useRef<HTMLElement>(null);
 
-  // Optional: Prevent scrolling while intro is playing
+  // Prevent scrolling while intro is playing
   useEffect(() => {
     if (showIntro) {
       document.body.style.overflow = 'hidden';
@@ -25,18 +27,16 @@ export default function App() {
   }, [showIntro]);
 
   return (
-    <div className="h-screen w-full bg-kindev-bg text-kindev-dark font-sans selection:bg-kindev-cyan/30 overflow-hidden relative">
+    <div className="h-screen w-full text-slate-200 font-sans selection:bg-kindev-cyan/30 overflow-hidden relative">
       {showIntro && <IntroAnimation onComplete={() => setShowIntro(false)} />}
       
-      {/* 
-        This is the main scroll container. 
-        It takes the full screen height and snaps its children. 
-      */}
+      {!showIntro && <AuroraBackground />}
+      
       <div className={`transition-opacity duration-1000 h-full w-full ${showIntro ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
         {!showIntro && <Navbar />}
         
-        {/* This is the main scroll container. It takes the full screen height and snaps its children. */}
-        <main className="w-full h-full overflow-y-auto overflow-x-hidden snap-y snap-mandatory scroll-smooth">
+        {/* Main scroll container: Free scroll on mobile, strict snap on desktop */}
+        <main ref={mainRef} className="w-full h-full overflow-y-auto overflow-x-hidden scroll-smooth snap-none md:snap-y md:snap-mandatory scroll-pt-20 md:scroll-pt-0">
           <Hero />
           <ServicesBento />
           <Portfolio />

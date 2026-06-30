@@ -18,7 +18,7 @@ export default function IntroAnimation({ onComplete }: IntroAnimationProps) {
   return (
     <div
       onClick={handleFinalComplete}
-      className={`fixed inset-0 z-50 flex items-center justify-center transition-opacity duration-500 cursor-pointer bg-white ${
+      className={`fixed inset-0 z-50 flex items-center justify-center transition-opacity duration-500 cursor-pointer bg-slate-950 ${
         isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'
       }`}
     >

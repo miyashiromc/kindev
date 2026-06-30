@@ -15,10 +15,25 @@
 }
 
 body {
-  background-color: var(--color-kindev-bg);
-  color: var(--color-kindev-dark);
+  background-color: #030712; /* Darker slate-950 for deep contrast */
+  color: #f8fafc; /* slate-50 default text */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Glassmorphism Utility */
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-dark {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 /* Custom Scrollbar */
@@ -26,12 +41,46 @@ body {
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--color-kindev-bg);
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #334155; /* slate-700 */
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #475569; /* slate-600 */
+}
+
+/* Pure CSS Aurora Animations for better GPU performance than JS-driven Framer Motion */
+@keyframes aurora-1 {
+  0%, 100% { transform: translate3d(0%, 0%, 0) scale(1); }
+  25% { transform: translate3d(20%, 15%, 0) scale(1.1); }
+  75% { transform: translate3d(-10%, -5%, 0) scale(0.9); }
+}
+
+@keyframes aurora-2 {
+  0%, 100% { transform: translate3d(0%, 0%, 0) scale(1); }
+  25% { transform: translate3d(-15%, -20%, 0) scale(0.9); }
+  75% { transform: translate3d(10%, 5%, 0) scale(1.2); }
+}
+
+@keyframes aurora-3 {
+  0%, 100% { transform: translate3d(0%, 0%, 0) scale(1); }
+  25% { transform: translate3d(25%, -10%, 0) scale(1.2); }
+  75% { transform: translate3d(-15%, 20%, 0) scale(0.8); }
+}
+
+.animate-aurora-1 {
+  animation: aurora-1 25s linear infinite;
+  will-change: transform;
+}
+
+.animate-aurora-2 {
+  animation: aurora-2 30s linear infinite;
+  will-change: transform;
+}
+
+.animate-aurora-3 {
+  animation: aurora-3 35s linear infinite;
+  will-change: transform;
 }

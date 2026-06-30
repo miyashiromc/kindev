@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'motion/react';
 import { ExternalLink, Smartphone, X } from 'lucide-react';
 import { useState } from 'react';
+import ScrollRevealText from './ScrollRevealText';
 
 const projects = [
   {
@@ -31,9 +32,9 @@ function ProjectCard({ project, index }: { project: any, index: number }) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
+      viewport={{ once: true, margin: "-100px" }}
       transition={{ delay: index * 0.2 }}
-      className="relative group bg-white rounded-3xl p-8 border border-slate-200 shadow-sm hover:shadow-xl transition-all cursor-pointer overflow-hidden"
+      className="relative group glass rounded-[32px] p-8 hover:shadow-xl transition-all cursor-pointer overflow-hidden border-transparent hover:border-white/10"
       onClick={() => setShowOverlay(true)}
       onMouseEnter={() => setShowOverlay(true)}
       onMouseLeave={() => setShowOverlay(false)}
@@ -41,25 +42,25 @@ function ProjectCard({ project, index }: { project: any, index: number }) {
       <div className="flex items-start justify-between mb-6">
         <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${project.color} flex items-center justify-center text-2xl font-bold text-white shadow-lg overflow-hidden`}>
           {project.logo ? (
-            <img src={project.logo} alt={`${project.name} Logo`} className="w-full h-full object-contain bg-white p-1" />
+            <img src={project.logo} alt={`${project.name} Logo`} className="w-full h-full object-contain bg-white/10 backdrop-blur-md p-1 rounded-xl" />
           ) : (
             project.letter
           )}
         </div>
         {/* We keep a visual hint that it's clickable, but it doesn't navigate on its own */}
-        <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 group-hover:text-kindev-cyan transition-colors border border-slate-200 group-hover:border-kindev-cyan">
+        <div className="w-10 h-10 rounded-full bg-white/[0.05] flex items-center justify-center text-slate-400 group-hover:text-kindev-cyan transition-colors border border-white/[0.1] group-hover:border-kindev-cyan">
           <ExternalLink size={18} />
         </div>
       </div>
       
-      <h3 className="text-[22px] font-display font-bold mb-3 text-slate-900">{project.name}</h3>
-      <p className="text-slate-700 font-normal text-[16px] leading-[1.6] mb-6 text-justify hyphens-auto">
+      <h3 className="text-[22px] font-display font-bold mb-3 text-white">{project.name}</h3>
+      <p className="text-slate-400 font-normal text-[16px] leading-[1.6] mb-6 text-justify hyphens-auto">
         {project.description}
       </p>
       
       <div className="flex flex-wrap gap-2 mb-6">
         {project.tags.map((tag: string) => (
-          <span key={tag} className="px-3 py-1 bg-slate-100 border border-slate-200 rounded-md font-mono text-[12px] uppercase tracking-widest text-slate-600">
+          <span key={tag} className="px-3 py-1 bg-white/[0.06] border border-white/[0.1] rounded-md font-mono text-[12px] uppercase tracking-widest text-slate-300">
             {tag}
           </span>
         ))}
@@ -132,21 +133,29 @@ function ProjectCard({ project, index }: { project: any, index: number }) {
 
 export default function Portfolio() {
   return (
-    <section id="proyectos" className="snap-start min-h-[100dvh] w-full flex items-center justify-center pt-24 pb-28 md:pt-20 md:pb-20 px-4 md:px-8 lg:px-12 bg-slate-50 relative overflow-hidden">
-      <div className="container mx-auto max-w-7xl">
+    <motion.section 
+      id="proyectos" 
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true, margin: "-100px" }}
+      className="snap-start md:min-h-[100dvh] w-full flex items-center justify-center py-16 md:pt-20 md:pb-20 px-4 md:px-8 lg:px-12 relative overflow-hidden"
+    >
+      <div className="container mx-auto max-w-7xl relative z-10">
         <div className="mb-10 md:text-center">
-          <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 text-slate-900">Casos de Éxito</h2>
-          <p className="text-slate-700 font-normal text-lg md:text-[18px] max-w-2xl mx-auto text-justify md:text-center hyphens-auto">
-            Proyectos reales funcionando en producción. Desde plataformas web completas hasta aplicaciones publicadas en la Play Store.
+          <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 text-white">
+            <ScrollRevealText text="Casos de Éxito" />
+          </h2>
+          <p className="text-slate-400 font-normal text-lg md:text-[18px] max-w-2xl mx-auto text-justify hyphens-auto">
+            <ScrollRevealText text="Proyectos reales donde nuestra tecnología ha sido clave para el crecimiento empresarial." />
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {projects.map((project, index) => (
-            <ProjectCard key={project.name} project={project} index={index} />
+            <ProjectCard key={index} project={project} index={index} />
           ))}
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }

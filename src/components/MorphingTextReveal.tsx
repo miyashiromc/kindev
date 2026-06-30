@@ -8,6 +8,7 @@ interface MorphingTextRevealProps {
   className?: string
   interval?: number
   glitchOnHover?: boolean
+  startDelay?: number
 }
 
 export function MorphingTextReveal({
@@ -15,11 +16,27 @@ export function MorphingTextReveal({
   className,
   interval = 3000,
   glitchOnHover = true,
+  startDelay = 600,
 }: MorphingTextRevealProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [displayText, setDisplayText] = useState("")
+  
+  const getRandomChar = useCallback(() => {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*"
+    return chars[Math.floor(Math.random() * chars.length)]
+  }, [])
+
+  const [displayText, setDisplayText] = useState(() => {
+    if (texts.length === 0) return ""
+    let init = ""
+    for (let i = 0; i < texts[0].length; i++) {
+      init += texts[0][i] === " " ? " " : getRandomChar()
+    }
+    return init
+  })
+  
   const [isAnimating, setIsAnimating] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
+  const [hasGlitchedIn, setHasGlitchedIn] = useState(false)
 
   const morphToNext = useCallback(() => {
     if (isAnimating) return
@@ -60,24 +77,53 @@ export function MorphingTextReveal({
     }
 
     animateStep()
-  }, [currentIndex, texts, isAnimating])
+  }, [currentIndex, texts, isAnimating, getRandomChar])
 
-  const getRandomChar = () => {
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*"
-    return chars[Math.floor(Math.random() * chars.length)]
-  }
+  const glitchIn = useCallback(() => {
+    if (texts.length === 0) return
+    setIsAnimating(true)
+    const targetText = texts[0]
+    let step = 0
+    
+    const animateStep = () => {
+      if (step <= targetText.length) {
+        let newText = ""
+        for (let i = 0; i < targetText.length; i++) {
+          if (i < step) {
+            newText += targetText[i]
+          } else {
+            const shouldGlitch = Math.random() > 0.2
+            newText += shouldGlitch ? getRandomChar() : (targetText[i] === " " ? " " : getRandomChar())
+          }
+        }
+        setDisplayText(newText)
+        step++
+        setTimeout(animateStep, 50)
+      } else {
+        setDisplayText(targetText)
+        setIsAnimating(false)
+        setHasGlitchedIn(true)
+      }
+    }
+    animateStep()
+  }, [texts, getRandomChar])
 
   useEffect(() => {
     if (texts.length === 0) return
-    setDisplayText(texts[0])
-  }, [texts])
+    
+    const timer = setTimeout(() => {
+      glitchIn()
+    }, startDelay)
+
+    return () => clearTimeout(timer)
+  }, [texts, startDelay, glitchIn])
 
   useEffect(() => {
-    if (texts.length <= 1) return
+    if (texts.length <= 1 || !hasGlitchedIn) return
 
     const timer = setInterval(morphToNext, interval)
     return () => clearInterval(timer)
-  }, [morphToNext, interval, texts.length])
+  }, [morphToNext, interval, texts.length, hasGlitchedIn])
 
   const handleMouseEnter = () => {
     if (glitchOnHover) {
