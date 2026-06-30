@@ -154,13 +154,13 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
           }
         });
 
-        // Very high spring force combined with high friction ensures a direct snap without bouncing
-        this.vx += dx * 0.3 + forceX;
-        this.vy += dy * 0.3 + forceY;
+        // Moderate spring force combined with balanced friction for a slower, direct glide
+        this.vx += dx * 0.10 + forceX;
+        this.vy += dy * 0.10 + forceY;
         
-        // High friction (damping) to kill momentum instantly
-        this.vx *= 0.55;
-        this.vy *= 0.55;
+        // Balanced friction to prevent bounce but allow smooth slowing down
+        this.vx *= 0.70;
+        this.vy *= 0.70;
         
         this.x += this.vx;
         this.y += this.vy;
