@@ -39,16 +39,10 @@ export default function CanvasLogoReveal() {
       mouseY = -100;
     };
 
-    const handleInteraction = (e: MouseEvent | TouchEvent) => {
+    const handleInteraction = (e: PointerEvent) => {
       const rect = canvas.getBoundingClientRect();
-      let clientX, clientY;
-      if ('touches' in e && e.touches.length > 0) {
-        clientX = e.touches[0].clientX;
-        clientY = e.touches[0].clientY;
-      } else {
-        clientX = (e as MouseEvent).clientX;
-        clientY = (e as MouseEvent).clientY;
-      }
+      const clientX = e.clientX;
+      const clientY = e.clientY;
       
       waves.push({
         x: clientX - rect.left,
@@ -62,8 +56,7 @@ export default function CanvasLogoReveal() {
 
     canvas.addEventListener('mousemove', handleMouseMove);
     canvas.addEventListener('mouseleave', handleMouseLeave);
-    canvas.addEventListener('mousedown', handleInteraction);
-    canvas.addEventListener('touchstart', handleInteraction, { passive: true });
+    canvas.addEventListener('pointerdown', handleInteraction);
     
     class Particle {
       x: number;
@@ -121,16 +114,16 @@ export default function CanvasLogoReveal() {
           }
         }
 
-        // 3. Wave effect on tap
+        // 3. Wave effect on tap (massively increased force for visibility)
         waves.forEach(wave => {
           const distToWaveCenter = Math.sqrt((this.x - wave.x) ** 2 + (this.y - wave.y) ** 2);
           const distFromWaveFront = Math.abs(distToWaveCenter - wave.radius);
-          if (distFromWaveFront < 12) {
+          if (distFromWaveFront < 20) { // wider wave band
             const angle = Math.atan2(this.y - wave.y, this.x - wave.x);
-            // Push outwards and slightly upwards for a splash effect
-            const force = (12 - distFromWaveFront) * 1.5;
+            // Push outwards and upwards for a huge splash effect
+            const force = (20 - distFromWaveFront) * 3.0; // much stronger force
             forceX += Math.cos(angle) * force;
-            forceY += Math.sin(angle) * force - force * 0.3;
+            forceY += Math.sin(angle) * force - force * 0.5;
           }
         });
 
@@ -212,8 +205,8 @@ export default function CanvasLogoReveal() {
       
       ctx.clearRect(0, 0, logicalWidth, logicalHeight);
 
-      // Update waves
-      waves.forEach(w => w.radius += 5);
+      // Update waves (slightly slower so force applies longer)
+      waves.forEach(w => w.radius += 4);
       waves = waves.filter(w => w.radius < logicalWidth * 1.5); // Remove dead waves
 
       // Logo animation: start at x=55, move to x=0 over 800ms
@@ -268,8 +261,7 @@ export default function CanvasLogoReveal() {
       cancelAnimationFrame(animationFrameId);
       canvas.removeEventListener('mousemove', handleMouseMove);
       canvas.removeEventListener('mouseleave', handleMouseLeave);
-      canvas.removeEventListener('mousedown', handleInteraction);
-      canvas.removeEventListener('touchstart', handleInteraction);
+      canvas.removeEventListener('pointerdown', handleInteraction);
     };
   }, []);
 
