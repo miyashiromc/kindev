@@ -99,8 +99,8 @@ export default function Hero() {
           preload="auto"
         />
       </div>
-      {/* Soft Overlay to match Kindev style and ensure text readability */}
-      <div className="absolute inset-0 bg-white/85 backdrop-blur-[4px] -z-10" />
+      {/* Soft Overlay disabled for testing visibility of the video */}
+      {/* <div className="absolute inset-0 bg-white/85 backdrop-blur-[4px] -z-10" /> */}
 
       <div className="container mx-auto px-1 sm:px-6 relative z-10 max-w-5xl flex flex-col items-center text-center">
         
