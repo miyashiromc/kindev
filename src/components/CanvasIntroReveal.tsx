@@ -91,9 +91,11 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
         this.x = startLogoX + logoSize / 2;
         this.y = centerY;
         
-        // Massive initial explosive velocity in all directions (reduced on mobile)
+        // Lower explosive velocity on mobile for a much softer initial appearance
         const angle = Math.random() * Math.PI * 2;
-        const speed = isMobile ? Math.random() * 25 + 5 : Math.random() * 50 + 10;
+        const maxSpeed = isMobile ? 15 : 50;
+        const minSpeed = isMobile ? 2 : 10;
+        const speed = Math.random() * maxSpeed + minSpeed;
         this.vx = Math.cos(angle) * speed;
         this.vy = Math.sin(angle) * speed;
         
@@ -154,14 +156,15 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
           }
         });
 
-        // Moderate spring force, significantly reduced for mobile for a much slower, graceful assembly
-        const springForce = isMobile ? 0.02 : 0.10;
+        // Moderate spring force, reduced for mobile to account for shorter travel distances
+        const springForce = isMobile ? 0.04 : 0.10;
         this.vx += dx * springForce + forceX;
         this.vy += dy * springForce + forceY;
         
-        // Balanced friction to prevent bounce but allow smooth slowing down
-        this.vx *= 0.70;
-        this.vy *= 0.70;
+        // Balanced friction to prevent bounce but allow smooth slowing down. Less damping on mobile for a softer glide.
+        const friction = isMobile ? 0.80 : 0.70;
+        this.vx *= friction;
+        this.vy *= friction;
         
         this.x += this.vx;
         this.y += this.vy;
@@ -221,8 +224,9 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
             const logicalX = x / dpr;
             const logicalY = y / dpr;
             
-            // Extremely short delay span so the whole word reveals almost instantly
-            const delay = (logicalX - textX) * 0.4 + Math.random() * 10;
+            // Longer delay on mobile for a smoother, softer wave-like reveal instead of a sudden explosion
+            const delayMultiplier = isMobile ? 1.8 : 0.4;
+            const delay = (logicalX - textX) * delayMultiplier + Math.random() * (isMobile ? 30 : 10);
             particles.push(new Particle(logicalX, logicalY, color, delay));
           }
         }
