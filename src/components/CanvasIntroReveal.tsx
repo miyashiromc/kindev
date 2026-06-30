@@ -124,7 +124,7 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
         const repelRadius = isMobile ? 40 : 60;
         if (distToLogoEdge < repelRadius) {
           const angle = Math.atan2(this.y - centerY, this.x - currentLogoRight);
-          const force = (repelRadius - distToLogoEdge) * 0.6;
+          const force = (repelRadius - distToLogoEdge) * (isMobile ? 0.3 : 0.6);
           forceX += Math.cos(angle) * force;
           forceY += Math.sin(angle) * force;
         }
@@ -154,9 +154,10 @@ export default function CanvasIntroReveal({ onComplete }: Props) {
           }
         });
 
-        // Moderate spring force combined with balanced friction for a slower, direct glide
-        this.vx += dx * 0.10 + forceX;
-        this.vy += dy * 0.10 + forceY;
+        // Moderate spring force, reduced for mobile to account for shorter travel distances
+        const springForce = isMobile ? 0.04 : 0.10;
+        this.vx += dx * springForce + forceX;
+        this.vy += dy * springForce + forceY;
         
         // Balanced friction to prevent bounce but allow smooth slowing down
         this.vx *= 0.70;
