@@ -55,10 +55,11 @@ export default function ServicesBento() {
   return (
     <motion.section 
       id="servicios" 
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true, margin: "-100px" }}
-      className="snap-start md:min-h-[100dvh] w-full flex items-center justify-center py-16 md:pt-24 md:pb-12 px-4 md:px-8 lg:px-12 relative overflow-hidden"
+      initial={{ opacity: 0, filter: "blur(8px)", y: 20 }}
+      whileInView={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+      viewport={{ once: false, margin: "-40% 0px -40% 0px" }}
+      transition={{ duration: 0.7, ease: "easeOut" }}
+      className="snap-start w-full flex flex-col justify-center py-16 md:py-24 px-4 md:px-8 lg:px-12 relative overflow-hidden"
     >
       <div className="container mx-auto max-w-7xl relative z-10">
         <div className="mb-6 md:mb-8 md:text-center">

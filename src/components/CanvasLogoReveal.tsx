@@ -230,9 +230,15 @@ export default function CanvasLogoReveal() {
 
     let animationFrameId: number;
     let startTime = Date.now();
+    let lastRenderTime = Date.now();
 
     const render = () => {
+      animationFrameId = requestAnimationFrame(render);
+      
       const currentTime = Date.now();
+      if (currentTime - lastRenderTime < 15) return; // Cap at ~60fps for consistent physics
+      lastRenderTime = currentTime;
+
       // Start animation 800ms after component mounts (to match Navbar drop down)
       const elapsed = currentTime - startTime - 800;
       
@@ -251,12 +257,19 @@ export default function CanvasLogoReveal() {
       }
 
       // Update and draw particles
+      let allSettled = true;
       if (elapsed > 0) {
         // We pass logoX + 22 (approx center of the larger logo) so particles react to it
         particles.forEach(p => {
           p.update(elapsed, logoX + 22);
           p.draw(ctx);
+          
+          if (p.active && (Math.abs(p.x - p.originX) > 0.5 || Math.abs(p.y - p.originY) > 0.5 || Math.abs(p.vx) > 0.1 || Math.abs(p.vy) > 0.1)) {
+            allSettled = false;
+          }
         });
+      } else {
+        allSettled = false;
       }
 
       // Draw Logo
@@ -267,13 +280,12 @@ export default function CanvasLogoReveal() {
       }
 
       // Check if we can pause the animation loop
-      // Conditions for idle: >2.5s since start, no waves, no mouse, >3.5s since last interaction to allow settling
-      if (elapsed > 2500 && waves.length === 0 && mouseX === -100 && (currentTime - lastActiveTime > 3500)) {
+      // Conditions for idle: >2.5s since start, no waves, no mouse, and particles have physically settled
+      if (elapsed > 2500 && waves.length === 0 && mouseX === -100 && allSettled && (currentTime - lastActiveTime > 1500)) {
         isRunning = false;
+        cancelAnimationFrame(animationFrameId);
         return; // Exit loop
       }
-
-      animationFrameId = requestAnimationFrame(render);
     };
 
     // Ensure fonts are loaded before extracting text pixels

@@ -6,10 +6,11 @@ export default function ContactTerminal() {
   return (
     <motion.section 
       id="contacto" 
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true, margin: "-100px" }}
-      className="snap-start md:min-h-[100dvh] w-full flex flex-col items-center justify-center pt-16 pb-28 md:pt-20 md:pb-20 px-4 md:px-8 lg:px-12 relative overflow-hidden"
+      initial={{ opacity: 0, filter: "blur(8px)", y: 20 }}
+      whileInView={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+      viewport={{ once: false, margin: "-40% 0px -40% 0px" }}
+      transition={{ duration: 0.7, ease: "easeOut" }}
+      className="snap-start w-full flex flex-col items-center justify-center pt-16 pb-28 md:py-24 px-4 md:px-8 lg:px-12 relative overflow-hidden"
     >
       <div className="container mx-auto max-w-5xl relative z-10">
         <motion.div 

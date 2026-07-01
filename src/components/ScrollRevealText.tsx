@@ -4,7 +4,7 @@ import React from 'react';
 interface ScrollRevealTextProps {
   text: string;
   className?: string;
-  as?: keyof JSX.IntrinsicElements;
+  as?: keyof React.JSX.IntrinsicElements;
 }
 
 export default function ScrollRevealText({ text, className = "", as: Component = "span" }: ScrollRevealTextProps) {

@@ -7,43 +7,45 @@ export default function BottomNav() {
 
   useEffect(() => {
     const sections = ['home', 'servicios', 'proyectos', 'precios', 'contacto'];
-    const visibilityMap = new Map<string, number>();
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        const id = entry.target.id === 'inicio' ? 'home' : entry.target.id;
-        visibilityMap.set(id, entry.intersectionRatio);
-      });
+    const handleScroll = () => {
+      let maxVisibleHeight = 0;
+      let mostVisible = active;
 
-      let maxRatio = 0;
-      let mostVisible = '';
+      sections.forEach((section) => {
+        const elementId = section === 'home' ? 'inicio' : section;
+        const element = document.getElementById(elementId);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          // Calculate visible height in viewport
+          const visibleTop = Math.max(0, rect.top);
+          const visibleBottom = Math.min(window.innerHeight, rect.bottom);
+          const visibleHeight = Math.max(0, visibleBottom - visibleTop);
 
-      visibilityMap.forEach((ratio, id) => {
-        if (ratio > maxRatio) {
-          maxRatio = ratio;
-          mostVisible = id;
+          if (visibleHeight > maxVisibleHeight) {
+            maxVisibleHeight = visibleHeight;
+            mostVisible = section;
+          }
         }
       });
 
-      if (maxRatio > 0 && mostVisible) {
-        setActive(prev => mostVisible !== prev ? mostVisible : prev);
+      if (maxVisibleHeight > 0 && mostVisible !== active) {
+        setActive(mostVisible);
       }
-    }, {
-      root: null,
-      threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
-    });
+    };
 
-    sections.forEach(section => {
-      const elementId = section === 'home' ? 'inicio' : section;
-      const element = document.getElementById(elementId);
-      if (element) {
-        observer.observe(element);
-        visibilityMap.set(section, 0);
-      }
-    });
+    // Run once on mount
+    handleScroll();
 
-    return () => observer.disconnect();
-  }, []);
+    const scrollContainer = document.querySelector('main') || window;
+    scrollContainer.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll, { passive: true });
+
+    return () => {
+      scrollContainer.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
+  }, [active]);
 
   const navItems = [
     { id: 'home', label: 'Inicio', icon: Sparkles, href: '#inicio' },
@@ -54,7 +56,7 @@ export default function BottomNav() {
   ];
 
   return (
-    <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 w-full glass border-t border-white/10 pb-safe shadow-[0_-4px_20px_rgb(0,0,0,0.2)]">
+    <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 w-full glass-nav border-t border-white/10 pb-safe shadow-[0_-4px_20px_rgb(0,0,0,0.2)]">
       <div className="flex justify-around items-center px-2 py-1.5">
         {navItems.map(({ id, label, icon: Icon, href }) => {
           const isActive = active === id;

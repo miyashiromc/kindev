@@ -5,10 +5,11 @@ export default function Pricing() {
   return (
     <motion.section 
       id="precios" 
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true, margin: "-100px" }}
-      className="snap-start md:min-h-[100dvh] w-full flex flex-col items-center justify-center py-16 md:pt-20 md:pb-20 relative overflow-hidden"
+      initial={{ opacity: 0, filter: "blur(8px)", y: 20 }}
+      whileInView={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+      viewport={{ once: false, margin: "-40% 0px -40% 0px" }}
+      transition={{ duration: 0.7, ease: "easeOut" }}
+      className="snap-start w-full flex flex-col items-center justify-center py-16 md:py-24 relative overflow-hidden"
     >
       <div className="mb-16 md:mb-24 md:text-center z-10 px-6 relative">
         <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 text-white">

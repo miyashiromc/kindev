@@ -36,7 +36,7 @@ export default function App() {
         {!showIntro && <Navbar />}
         
         {/* Main scroll container: Free scroll on mobile, strict snap on desktop */}
-        <main ref={mainRef} className="w-full h-full overflow-y-auto overflow-x-hidden scroll-smooth snap-none md:snap-y md:snap-mandatory scroll-pt-20 md:scroll-pt-0">
+        <main ref={mainRef} className="w-full h-full overflow-y-auto overflow-x-hidden scroll-smooth snap-none md:snap-y md:snap-proximity scroll-pt-20 md:scroll-pt-0">
           <Hero />
           <ServicesBento />
           <Portfolio />

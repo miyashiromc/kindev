@@ -35,10 +35,11 @@ export default function Hero() {
   return (
     <motion.section 
       id="inicio" 
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true, margin: "-100px" }}
-      className="snap-start min-h-[85dvh] md:min-h-[100dvh] w-full relative flex flex-col items-center justify-center pt-28 pb-12 md:pt-0 md:pb-0 px-2 md:px-8 overflow-hidden"
+      initial={{ opacity: 0, filter: "blur(8px)", y: 20 }}
+      whileInView={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+      viewport={{ once: false, margin: "-40% 0px -40% 0px" }}
+      transition={{ duration: 0.7, ease: "easeOut" }}
+      className="snap-start min-h-[85dvh] md:min-h-[85dvh] lg:min-h-[85dvh] w-full relative flex flex-col items-center justify-center pt-28 pb-12 md:pt-32 md:pb-16 px-2 md:px-8 overflow-hidden"
     >
       <div className="container mx-auto px-1 sm:px-6 relative z-10 max-w-5xl flex flex-col items-center text-center">
         
