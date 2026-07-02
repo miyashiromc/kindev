@@ -1,4 +1,4 @@
-import { motion, AnimatePresence, useScroll, useTransform, useMotionValueEvent } from 'motion/react';
+import { motion, AnimatePresence, useScroll, useTransform, useMotionValueEvent, useSpring } from 'motion/react';
 import { ExternalLink, Smartphone, X } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import ScrollRevealText from './ScrollRevealText';
@@ -116,7 +116,7 @@ function ProjectCard({ project }: { project: any; key?: string }) {
                 {/* Text Content */}
                 <div className="flex-1 min-w-0 pt-0.5 lg:pt-0 w-full pr-8 lg:pr-12">
                   <h3 className="text-base sm:text-lg lg:text-[28px] font-display font-bold text-white leading-tight truncate lg:whitespace-normal mb-0.5 lg:mb-2">{project.name}</h3>
-                  <p className="text-slate-300 font-normal text-[11px] sm:text-xs lg:text-[16px] leading-[1.4] lg:leading-[1.6] text-justify hyphens-auto line-clamp-3 lg:line-clamp-none">
+                  <p className="text-slate-300 font-normal text-[11px] sm:text-xs lg:text-[16px] leading-[1.4] lg:leading-[1.6] text-left md:text-justify md:hyphens-auto line-clamp-3 lg:line-clamp-none">
                     {project.description}
                   </p>
                 </div>
@@ -189,7 +189,7 @@ function PortfolioContent({ scrollContainerRef }: { scrollContainerRef: React.Re
         const scrollWidth = carouselContainerRef.current.scrollWidth;
         const clientWidth = window.innerWidth;
         // The distance to slide is the difference, plus a little extra padding
-        setSlideDistance(Math.max(0, scrollWidth - clientWidth + (window.innerWidth < 768 ? 32 : 64))); 
+        setSlideDistance(Math.max(0, scrollWidth - clientWidth + (window.innerWidth < 768 ? 32 : 160))); 
       } else {
         setSlideDistance(0);
       }
@@ -207,48 +207,64 @@ function PortfolioContent({ scrollContainerRef }: { scrollContainerRef: React.Re
     offset: ["start start", "end end"],
   });
 
-  // Desktop: h-[400vh], flattens over first 100vh [0, 0.25], then slides [0.3, 1].
-  // Mobile: h-auto (native vertical flow), flattens quickly over the first part of scroll.
-  const flattenEnd = isMobile ? 0.3 : 0.25;
+  const smoothScrollYProgress = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 20,
+    restDelta: 0.001
+  });
 
-  const rotateX = useTransform(scrollYProgress, [0, flattenEnd], [25, 0], { clamp: true });
-  const brightnessVal = useTransform(scrollYProgress, [0, flattenEnd], [0.4, 1], { clamp: true });
-  const rotateZ = useTransform(scrollYProgress, [0, flattenEnd], [isMobile ? 10 : 15, 0], { clamp: true });
-  const scale = useTransform(scrollYProgress, [0, flattenEnd], [isMobile ? 0.85 : 0.7, 1], { clamp: true });
+  // Desktop: h-[200vh]
+  // Phase 1 [0 - 0.15]: Cards flatten
+  // Phase 2 [0.15 - 0.25]: PAUSE (Kargox shown fully)
+  // Phase 3 [0.25 - 0.8]: Slide horizontally
+  // Phase 4 [0.8 - 1.0]: PAUSE (Prisma shown fully before section exits)
+  const flattenEnd = isMobile ? 0.2 : 0.15;
+  const slideStart = isMobile ? 0.2 : 0.25;
+  const slideEnd = isMobile ? 1 : 0.8;
+
+  const rotateX = useTransform(smoothScrollYProgress, [0, flattenEnd], [25, 0], { clamp: true });
+  const brightnessVal = useTransform(smoothScrollYProgress, [0, flattenEnd], [0.4, 1], { clamp: true });
+  const rotateZ = useTransform(smoothScrollYProgress, [0, flattenEnd], [isMobile ? 10 : 15, 0], { clamp: true });
+  const scale = useTransform(smoothScrollYProgress, [0, flattenEnd], [isMobile ? 0.85 : 0.7, 1], { clamp: true });
   const cardsFilter = useTransform(brightnessVal, (v) => `brightness(${v})`);
 
-  const headerOpacity = useTransform(scrollYProgress, [0, flattenEnd * 0.7, 1], [1, isMobile ? 1 : 0, isMobile ? 1 : 0]);
-  const headerY = useTransform(scrollYProgress, [0, flattenEnd * 0.7, 1], [0, isMobile ? 0 : -20, isMobile ? 0 : -20]);
+  const headerOpacity = useTransform(smoothScrollYProgress, [0, flattenEnd * 0.7, flattenEnd], [1, 0, 0]);
+  const headerY = useTransform(smoothScrollYProgress, [0, flattenEnd * 0.7, 1], [0, isMobile ? 0 : -20, isMobile ? 0 : -20]);
 
-  // Desktop uses a hard translation
+  // Desktop uses a hard translation with pauses at ends
   const carouselX = useTransform(
-    scrollYProgress,
-    [0.3, 1],
+    smoothScrollYProgress,
+    [slideStart, slideEnd],
     [0, -slideDistance]
   );
 
   // Mobile uses native scroll exclusively, no vertical sync to avoid fighting the user's manual swipes.
 
-  const pointerEvents = useTransform(scrollYProgress, (v) => v >= flattenEnd ? "auto" : "none");
+  const pointerEvents = useTransform(smoothScrollYProgress, (v) => v >= flattenEnd ? "auto" : "none");
+
+
 
   return (
     <section 
       ref={ref}
       id="proyectos" 
-      className="h-auto md:h-[400vh] w-full relative"
+      className="h-auto md:h-[200vh] w-full relative"
     >
-      <div className="relative md:sticky top-0 min-h-fit md:h-screen pt-24 md:pt-0 pb-10 md:pb-0 w-full overflow-visible md:overflow-hidden antialiased flex flex-col justify-start items-center [perspective:1000px] [transform-style:preserve-3d]">
-        {/* Header: overlays the tilted cards, fades away as they flatten */}
+      <div className="relative md:sticky top-0 min-h-fit md:h-screen pt-[80px] md:pt-0 pb-10 md:pb-0 w-full overflow-visible md:overflow-hidden antialiased flex flex-col justify-start items-center [perspective:1000px] [transform-style:preserve-3d]">
+        {/* Header: overlays the tilted cards on desktop, normal relative flow on mobile */}
         <motion.div 
-          style={{ opacity: headerOpacity, y: headerY }}
-          className="max-w-7xl sticky md:absolute mx-auto px-4 w-full left-0 right-0 top-[80px] md:top-0 md:mt-0 pt-4 pb-4 md:pt-32 z-30 pointer-events-none bg-[#020617]/80 backdrop-blur-xl border-b border-white/5 md:border-none md:bg-transparent md:backdrop-blur-none"
+          style={{ opacity: isMobile ? 1 : headerOpacity, y: isMobile ? 0 : headerY }}
+          className="max-w-7xl relative md:absolute mx-auto px-4 w-full left-0 right-0 top-0 md:mt-0 pt-4 pb-4 md:pt-32 z-30 pointer-events-none bg-transparent"
         >
-          <h2 className="text-4xl md:text-7xl font-display font-bold text-white mb-4 md:mb-6">
+          <span className="section-label text-soft-purple/70 mb-4 block md:hidden">Portafolio</span>
+          <h2 className="text-4xl md:text-7xl font-display font-bold text-white mb-2 md:mb-6">
             <ScrollRevealText text="Nuestros Proyectos" />
           </h2>
-          <p className="max-w-2xl text-base md:text-xl text-slate-400 font-normal leading-[1.6]">
+          <motion.p 
+            className="max-w-2xl text-base md:text-xl text-slate-400 font-normal leading-[1.6]"
+          >
             <ScrollRevealText text="Proyectos reales donde nuestra tecnología ha sido clave para el crecimiento empresarial." />
-          </p>
+          </motion.p>
         </motion.div>
 
         {/* Cards with 3D effect */}
@@ -267,7 +283,7 @@ function PortfolioContent({ scrollContainerRef }: { scrollContainerRef: React.Re
           <motion.div 
             style={{ x: isMobile ? 0 : carouselX }}
             ref={carouselContainerRef}
-            className="flex flex-col md:flex-row gap-6 xl:gap-16 px-4 md:px-0 w-full items-center md:justify-start pb-8"
+            className="flex flex-col md:flex-row gap-6 xl:gap-16 px-4 md:px-12 lg:px-24 xl:px-32 w-full items-center md:justify-start pb-8"
           >
             {projects.map((project) => (
               <div key={project.name} className="snap-center flex-shrink-0">

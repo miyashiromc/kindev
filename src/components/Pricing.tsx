@@ -12,7 +12,8 @@ export default function Pricing() {
       className="snap-start w-full flex flex-col items-center justify-center py-16 md:py-24 relative overflow-hidden"
     >
       <div className="mb-16 md:mb-24 md:text-center z-10 px-6 relative">
-        <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 text-white">
+        <span className="section-label text-kindev-emerald/70 mb-4 block">Planes</span>
+        <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 gradient-text-primary">
           <ScrollRevealText text="Inversión Transparente" />
         </h2>
         <p className="text-slate-400 font-normal text-lg md:text-[18px] max-w-2xl mx-auto text-center md:text-center hyphens-auto">
@@ -69,7 +70,7 @@ export default function Pricing() {
             <li className="flex items-center"><span className="mr-2 text-kindev-emerald font-bold">✓</span>Botón de WhatsApp</li>
             <li className="flex items-center"><span className="mr-2 text-kindev-emerald font-bold">✓</span>Formulario de Contacto</li>
           </ul>
-          <a href="https://wa.me/593998298263?text=Hola%2C%20me%20interesa%20el%20plan%20de%20P%C3%A1gina%20Web%20B%C3%A1sica" target="_blank" rel="noopener noreferrer" className="block text-center w-full rounded-xl bg-gradient-to-r from-kindev-cyan to-kindev-emerald py-3 font-semibold text-[15px] text-white hover:opacity-90 transition shadow-lg shadow-kindev-cyan/20">
+          <a href="https://wa.me/593998298263?text=Hola%2C%20me%20interesa%20el%20plan%20de%20P%C3%A1gina%20Web%20B%C3%A1sica" target="_blank" rel="noopener noreferrer" className="block text-center w-full rounded-xl bg-gradient-to-r from-kindev-cyan to-kindev-emerald py-3 font-semibold text-[15px] text-white hover:opacity-90 transition shadow-lg shadow-kindev-cyan/20 glow-hover-primary">
             Elegir Plan
           </a>
         </motion.div>

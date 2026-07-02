@@ -17,17 +17,19 @@ export default function ContactTerminal() {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="glass-dark border border-white/10 rounded-3xl p-8 md:p-12 shadow-2xl text-center relative overflow-hidden group"
+          className="glass-dark border border-kindev-cyan/15 rounded-3xl p-5 md:p-12 shadow-2xl text-center relative overflow-hidden group"
         >
           {/* subtle animated glow inside card */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] bg-[conic-gradient(from_0deg,transparent_0_340deg,rgba(16,185,129,0.2)_360deg)] animate-[spin_4s_linear_infinite] opacity-30 pointer-events-none -z-10" />
           <div className="absolute inset-[1px] bg-slate-950/90 rounded-3xl -z-10 backdrop-blur-xl" />
+          <div className="absolute -top-24 -right-24 w-64 h-64 rounded-full pointer-events-none -z-10" style={{ background: 'radial-gradient(circle, rgba(76,215,246,0.15) 0%, transparent 70%)', filter: 'blur(40px)' }} />
+          <div className="absolute -bottom-24 -left-24 w-64 h-64 rounded-full pointer-events-none -z-10" style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.15) 0%, transparent 70%)', filter: 'blur(40px)' }} />
 
           <div className="mb-8">
-            <h2 className="text-3xl md:text-5xl font-display font-extrabold text-white mb-4 tracking-tight">
+            <h2 className="text-3xl md:text-5xl font-display font-extrabold mb-4 tracking-tight gradient-text-primary">
               <ScrollRevealText text="¿Listo para dar el siguiente paso?" />
             </h2>
-            <p className="text-slate-400 font-normal text-lg md:text-[18px] leading-[1.6] max-w-xl mx-auto text-justify hyphens-auto">
+            <p className="text-slate-400 font-normal text-lg md:text-[18px] leading-[1.6] max-w-xl mx-auto text-center md:text-justify md:hyphens-auto">
               <ScrollRevealText text="Contáctanos directamente por WhatsApp y cuéntanos sobre tu proyecto. Estamos listos para construirlo." />
             </p>
           </div>

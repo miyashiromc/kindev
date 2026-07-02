@@ -65,7 +65,7 @@ export default function BottomNav() {
               key={id}
               href={href}
               onClick={() => setActive(id)}
-              className={`relative flex flex-col items-center justify-center w-[68px] h-[46px] gap-0.5 rounded-xl transition-colors z-10 ${
+              className={`relative flex flex-col items-center justify-center flex-1 h-[46px] gap-0.5 rounded-xl transition-colors z-10 ${
                 isActive ? 'text-kindev-cyan' : 'text-slate-400 hover:text-white'
               }`}
             >

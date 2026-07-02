@@ -47,17 +47,18 @@ export default function Workflow() {
     >
       <div className="container mx-auto max-w-7xl relative z-10">
         <div className="mb-16 md:text-center">
-          <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 text-white">
+          <span className="section-label text-kindev-purple/70 mb-4 block">Nuestro Proceso</span>
+          <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 gradient-text-primary">
             <ScrollRevealText text="¿Cómo trabajamos?" />
           </h2>
-          <p className="text-slate-400 font-normal text-lg md:text-[18px] max-w-2xl mx-auto text-justify hyphens-auto">
+          <p className="text-slate-400 font-normal text-lg md:text-[18px] max-w-2xl mx-auto text-left md:text-justify md:hyphens-auto">
             <ScrollRevealText text="Un proceso claro, transparente y orientado a resultados desde el primer día." />
           </p>
         </div>
 
         <div className="relative">
           {/* Connecting line for desktop */}
-          <div className="hidden md:block absolute top-1/2 left-0 w-full h-[2px] bg-white/[0.06] -translate-y-1/2 z-0" />
+          <div className="hidden md:block absolute top-1/2 left-0 w-full h-[1px] bg-gradient-to-r from-kindev-cyan/20 via-kindev-emerald/20 to-kindev-purple/20 -translate-y-1/2 z-0" />
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 relative z-10">
             {steps.map((step, index) => {
@@ -69,7 +70,7 @@ export default function Workflow() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-100px" }}
                   transition={{ duration: 0.5, delay: index * 0.2 }}
-                  className="group relative glass rounded-[32px] p-8 hover:shadow-xl transition-all hover:-translate-y-2 overflow-hidden border-transparent hover:border-white/[0.15]"
+                  className="group relative glass rounded-[32px] p-5 md:p-8 hover:shadow-xl transition-all hover:-translate-y-2 overflow-hidden border-transparent hover:border-white/[0.15]"
                 >
                   
                   {/* Subtle gradient glow on hover */}
@@ -92,7 +93,7 @@ export default function Workflow() {
 
                   {/* Content */}
                   <h4 className="text-[22px] font-display font-bold mb-4 text-white group-hover:text-slate-200 transition-colors duration-300">{step.title}</h4>
-                  <p className="text-slate-400 font-normal text-[16px] leading-[1.6] text-justify hyphens-auto">
+                  <p className="text-slate-400 font-normal text-[16px] leading-[1.6] text-left md:text-justify md:hyphens-auto">
                     {step.desc}
                   </p>
 
